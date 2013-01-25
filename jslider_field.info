@@ -1,1 +1,5 @@
-name = jSlider Field
+name = jQuery UI Slider Field
+description = Integrates form element and widget
+package = User interface
+core = 7.x
+
