@@ -6,3 +6,11 @@
 .green .ui-slider-handle { border-color: #8ae234; }
 .blue .ui-slider-range { background: #729fcf; }
 .blue .ui-slider-handle { border-color: #729fcf; }
+.blue .ui-slider-range { background: #729fcf; }
+.blue .ui-slider-handle { border-color: #729fcf; }
+.orange .ui-slider-range { background: #ffa500; }
+.orange .ui-slider-handle { border-color: #ffa500; }
+.purple .ui-slider-range { background:  #800080; }
+.purple .ui-slider-handle { border-color: #800080; }
+.orange_red .ui-slider-range { background: #ff4500; }
+.orange_red .ui-slider-handle { border-color: #ff4500; }
