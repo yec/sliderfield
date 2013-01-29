@@ -101,7 +101,26 @@ function example_form() {
     /**
     * Display the element inside a fieldset
     */
-    '#display_inside_fieldset' => FALSE
+    '#display_inside_fieldset' => FALSE,
+    /**
+     * Sliders with the same group will be linked
+     * The behavior of linked sliders depends on group_type parametr
+     * group name can only contain letters, numbers and underscore
+     */
+    '#group' => NULL,
+    /**
+     * same : All sliders in the same group will have the same value.
+     * lock : All sliders in the same group will move with the exact same amount
+     * total : The total value of all sliders will be between min/max , incresing value of
+     *         one slider decreases the rest of the sliders in the same group
+     */
+    '#group_type' => 'same',
+    /**
+     * When set to TRUE, other sliders in the same
+     * group will change only if this slider changes
+     * values : TRUE , FALSE
+     */
+    '#group_master' => FALSE,
   );
 
   $form['slider2'] = array(
