@@ -17,7 +17,7 @@ function _jslider_field_theme_jslider() {
 function _jslider_field_element_info_jslider() {
   $types['jslider'] =  array(
     '#input'            => TRUE,
-    '#process'          => array('jslider_field_jslider_process'),
+    '#process'          => array('_jslider_field_jslider_process'),
     '#value_callback'   => 'jslider_field_jslider_value_callback',
     '#element_validate' => array('jslider_field_jslider_validate'),
     '#theme'            => array('jslider_field_jslider'),
@@ -85,6 +85,11 @@ function _jslider_field_element_info_jslider() {
      */
     '#display_values' => FALSE,
     /**
+     * Format of the displaied values
+     * The usage is mostly for showing $,% or other signs near the value
+     */
+    '#display_values_format' => '%{value}%',
+    /**
      * Acceptable types are the same as css with and height and it will be used as width
      * or height depending on #orientation
      */
@@ -92,7 +97,26 @@ function _jslider_field_element_info_jslider() {
     /**
      * Display the element inside a fieldset
      */
-    '#display_inside_fieldset' => FALSE
+    '#display_inside_fieldset' => FALSE,
+    /**
+     * Sliders with the same group will be linked
+     * The behavior of linked sliders depends on group_type parametr
+     * group name can only contain letters, numbers and underscore
+     */
+    '#group' => NULL,
+    /**
+     * same : All sliders in the same group will have the same value.
+     * lock : All sliders in the same group will move with the exact same amount
+     * total : The total value of all sliders will be between min/max , incresing value of
+     *         one slider decreases the rest of the sliders in the same group
+     */
+    '#group_type' => 'same',
+    /**
+     * When set to TRUE, other sliders in the same
+     * group will change only if this slider changes
+     * values : TRUE , FALSE
+     */
+    '#group_master' => FALSE,
   );
   return $types;
 }
@@ -101,8 +125,9 @@ function _jslider_field_element_info_jslider() {
  * Processes transfer slider: add textfields
  * @param unknown_type $element
  */
-function jslider_field_jslider_process($element) {
+function _jslider_field_jslider_process($element) {
   $element['#tree'] = TRUE;
+
 
   if ($element['#display_inside_fieldset']) {
     $element['slider'] = array(
@@ -126,9 +151,18 @@ function jslider_field_jslider_process($element) {
   $values = array();
   $values[] = $element['#value'];
 
+  $group_css = '';
+  if ($element['#group']) {
+    $group_css = 'jslider-group-' . $element['#group'];
+
+    if ($element['#group_master']) {
+      $group_css .= ' jslider-group-master';
+    }
+  }
+
   // Generate input for slider
   $element['slider']['value'] = array(
-    '#prefix'           => '<div id="' . $element['#id'] . '" class="jslider">',
+    '#prefix'           => '<div id="' . $element['#id'] . '" class="jslider ' . $group_css . '">',
     '#type'             => 'textfield',
     '#required'    => $element['#required'],
     '#title'             => $element['#input_title'],
@@ -170,10 +204,13 @@ function jslider_field_jslider_process($element) {
   }
 
   if ($element['#display_values']) {
+    foreach ($values as $key => $value) {
+      $values[$key] = str_replace('%{value}%', $value ,$element['#display_values_format']);
+    }
     $element['slider']['values_text'] = array(
       '#type'       => 'item',
       //'#attributes' => array('class' => array('jslider-display-values-field')),
-      '#markup'     => '<div class="jslider-display-values-field">' . implode(' - ', $values) . '</div>'
+      '#markup'     => '<div class="jslider-display-values-field">' . htmlentities(implode(' - ',  $values)) . '</div>'
     );
   }
 
@@ -186,7 +223,7 @@ function jslider_field_jslider_process($element) {
     }
   }
 
-  // Create markup for slider container
+ // Create markup for slider container
   $element['slider']['container'] = array(
     '#type' => 'container',
     '#attributes' => array('class' => array('jslider-container', $element['#slider_style']), 'style' => $style),
@@ -206,7 +243,12 @@ function jslider_field_jslider_process($element) {
               'orientation' => $element['#orientation'],
               'range' => $element['#range'],
               'step' => $element['#step'] * 1,
-              'display_inputs' => $element['#display_inputs']
+              'display_inputs' => $element['#display_inputs'],
+              'display_values_format' => $element['#display_values_format'],
+              'display_values' => $element['#display_values'],
+              'group' => $element['#group'],
+              'group_type' => $element['#group_type'],
+              'group_master' => $element['#group_master']
             )
           ),
           'type' => 'setting',
@@ -401,6 +443,9 @@ function _jslider_field_field_widget_settings_form_jslider($field, $instance) {
         'red' => t('Red'),
         'green' => t('Green'),
         'blue' => t('Blue'),
+        'orange' => t('Orange'),
+        'purple' => t('Purple'),
+        'orange_red' => t('Orange Red'),
       ),
       '#description' => t('Some default color styles for ease of use'),
       '#default_value' => $settings['slider_style']
