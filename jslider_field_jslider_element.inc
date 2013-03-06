@@ -561,12 +561,12 @@ function _jslider_field_field_widget_form(&$form, &$form_state, $field, $instanc
     case 'jslider':
       $settings = $instance['widget']['settings']['jslider_settings'];
       $value = NULL;
+
       if (!empty($items)) {
-        $value = $items[$delta]['value']['value'];
+        $value = $items[$delta]['value'];
       } else {
         $value = $instance['settings']['min'];
       }
-
       $element['#element_validate'] = array('jslider_field_jslider_container_validate');
 
       //$element['#tree'] = FALSE;
