@@ -90,3 +90,28 @@ function jslider_field_validate_integer($element, &$form_state) {
     form_error($element, t('The value should be a valid integer number'));
   }
 }
+
+
+/**
+ *
+ */
+function jslider_field_get_styles($default = FALSE) {
+  $items = array(
+    '' => t('Default'),
+    'red' => t('Red'),
+    'green' => t('Green'),
+    'blue' => t('Blue'),
+    'orange' => t('Orange'),
+    'purple' => t('Purple'),
+    'steel-blue' => t('Steel Blue'),
+    'tiger-orange' => t('Tiger Orange'),
+    'wild-blue-yonder' => t('Wild Blue Yonder'),
+    'cinereous' => t('Cinereous'),
+    'laurel-green' => t('Laurel Green')
+  );
+  if (!$default) {
+    array_shift($items);
+  }
+
+  return $items;
+}
