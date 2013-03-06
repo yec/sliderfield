@@ -18,11 +18,13 @@ function _jslider_field_element_info_jslider() {
   $types['jslider'] =  array(
     '#input'            => TRUE,
     '#process'          => array('_jslider_field_jslider_process'),
-    '#value_callback'   => 'jslider_field_jslider_value_callback',
+    //'#value_callback'   => 'jslider_field_jslider_value_callback',
     '#element_validate' => array('jslider_field_jslider_validate'),
-    '#theme'            => array('jslider_field_jslider'),
+    '#theme'   => array('jslider_field_jslider'),
+    '#theme_wrappers'   => array('form_element'),
 
     '#title' => NULL,
+    '#title2' => NULL,
     '#input_title' => t('Min'),
     '#input2_title' => t('Max'),
     /**
@@ -63,9 +65,11 @@ function _jslider_field_element_info_jslider() {
     /**
      * Determines the value of the slider, if there's only one handle.
      * If there is more than one handle, determines the value of the first handle.
+     * Or an array of values can be passed array('value'=>1 , 'value2'=> 2) ,
+     * the order of values is important
      */
-    '#value' => 0,
-    '#value2' => NULL, //When using range
+    //'#value' => 0,
+    '#default_value' => NULL,
     /**
      * Some default color styles for ease of use
      * red, green, blue
@@ -117,6 +121,13 @@ function _jslider_field_element_info_jslider() {
      * values : TRUE , FALSE
      */
     '#group_master' => FALSE,
+    /**
+     * Disable buildin range validation
+     * useful when element is used as widget
+     * for fields, since integer fields have range validation
+     * values : TRUE , FALSE
+     */
+    '#validate_range' => TRUE
   );
   return $types;
 }
@@ -125,9 +136,24 @@ function _jslider_field_element_info_jslider() {
  * Processes transfer slider: add textfields
  * @param unknown_type $element
  */
-function _jslider_field_jslider_process($element) {
+function _jslider_field_jslider_element_structure($element, &$form_state) {
   $element['#tree'] = TRUE;
+  /*
+  $values = NULL;
+  $input = NULL;
+  if (isset($form_state['values'])) {
+    $values = drupal_array_get_nested_value($form_state['values'], $element['#parents']);
+    $input = drupal_array_get_nested_value($form_state['input'], $element['#parents']);
+  }
+  */
 
+  if (is_array($element['#value'])) {
+    $value = @$element['#value']['value'];
+    $value2 = @$element['#value']['value2'];
+  } else {
+    $value = $element['#value'];
+    $value2 = NULL;
+  }
 
   if ($element['#display_inside_fieldset']) {
     $element['slider'] = array(
@@ -135,10 +161,15 @@ function _jslider_field_jslider_process($element) {
       '#title'    => $element['#title']
     );
   } elseif ($element['#title']) {
+    $element['slider'] = array(
+      '#type' => 'container'
+    );
+    /*
     $element['slider']['title'] = array(
       '#type'             => 'item',
       '#markup'    => '<label>' . $element['#title'] . '</label>'
     );
+    */
   }
 
   if ($element['#value'] < $element['#min']) {
@@ -161,20 +192,42 @@ function _jslider_field_jslider_process($element) {
   }
 
   // Generate input for slider
-  $element['slider']['value'] = array(
+  $element['value'] = array(
+    '#tree'             => TRUE,
     '#prefix'           => '<div id="' . $element['#id'] . '" class="jslider ' . $group_css . '">',
     '#type'             => 'textfield',
     '#required'    => $element['#required'],
-    '#title'             => $element['#input_title'],
-    //'#value_callback'   => 'jslider_field_jslider_value_callback',
-    '#default_value'    => $element['#value'],
-    '#disabled'    => $element['#disabled'],
     '#element_validate' => array('jslider_field_validate_integer'),
+    '#title'             => $element['#input_title'],
+    '#default_value'    => $value,
+    '#disabled'    => $element['#disabled'],
     '#size'             => $element['#size'],
     '#attributes'       => array('class' => array('jslider-value-field')),
   );
 
-  if (!is_null($element['#value2'])) {
+  #--(Begin)--> For Ajax compatibiitly
+  if (isset($element['#ajax'])) {
+    $ajax = @$element['#ajax'];
+    if (!isset($ajax['trigger_as']) && isset($element['#name'])) {
+      $value = NULL;
+      $ajax['trigger_as'] = array(
+        'name' => $element['#name'],
+        'value' => $value
+      );
+    }
+    // Generate input for slider
+    $element['hidden_item'] = array(
+      '#prefix' => '<div class="jslider-event-field-container">',
+      '#suffix' => '</div>',
+      '#type'             => 'textfield',
+      '#default_value'    => $element['#default_value'],
+      '#ajax'             => $ajax,
+      '#attributes'       => array('style' => 'display:none;', 'class' => array('jslider-event-field')),
+    );
+  }
+  #--(End)--> For Ajax compatibiitly
+
+  if (!is_null($value2)) {
 
     if ($element['#value2'] < $element['#min']) {
       $element['#value2'] = $element['#min'];
@@ -187,9 +240,9 @@ function _jslider_field_jslider_process($element) {
       $element['#value2'] = $element['#value'];
     }
     $values[] = $element['#value2'];
-    $element['slider']['value2'] = array(
+    $element['value2'] = array(
       '#type'             => 'textfield',
-      '#default_value'    => $element['#value2'],
+      '#default_value'    => $value2,
       '#required'    => $element['#required'],
       '#title'             => $element['#input2_title'],
       '#element_validate' => array('jslider_field_validate_integer'),
@@ -207,9 +260,7 @@ function _jslider_field_jslider_process($element) {
     foreach ($values as $key => $value) {
       $values[$key] = str_replace('%{value}%', $value ,$element['#display_values_format']);
     }
-    $element['slider']['values_text'] = array(
-      '#type'       => 'item',
-      //'#attributes' => array('class' => array('jslider-display-values-field')),
+    $element['values_text'] = array(
       '#markup'     => '<div class="jslider-display-values-field">' . htmlentities(implode(' - ',  $values)) . '</div>'
     );
   }
@@ -224,7 +275,7 @@ function _jslider_field_jslider_process($element) {
   }
 
  // Create markup for slider container
-  $element['slider']['container'] = array(
+  $element['container'] = array(
     '#type' => 'container',
     '#attributes' => array('class' => array('jslider-container', $element['#slider_style']), 'style' => $style),
     '#attached' => array(
@@ -255,35 +306,42 @@ function _jslider_field_jslider_process($element) {
         )
       ),
       'css' => array(
-        drupal_get_path('module', 'jslider_field') . '/jslider_field_jslider.css',
+        array(
+          'data' => drupal_get_path('module', 'jslider_field') . '/jslider_field_jslider.css',
+          'type' => 'file',
+          //'group' => CSS_SYSTEM,
+          'weight' => 2000,
+        )
       ),
     ),
 
     '#markup' => '',
-    '#suffix'           => '</div>'
+    '#suffix' => '</div>'
   );
 
+  if ($element['#title2']) {
+    $element['title2'] = array(
+      '#type'             => 'item',
+      '#markup'    => '<label>' . $element['#title2'] . '</label>'
+    );
+  }
+
+  //$element = ajax_pre_render_element($element);
+  //dpm($element);
 
   return $element;
 }
 
 /**
- * @param $element
- * @param bool $input
- * @param $form_state
- * @return mixed
+ * Processes transfer slider: add textfields
+ * @param unknown_type $element
  */
-function jslider_field_jslider_value_callback($element, $input = FALSE, $form_state) {
-  if ($input) {
-    $form_state_value = $form_state['values'];
-    $element['#parents'][] = 'slider';
-    foreach ($element['#parents'] as $parent) {
-      $form_state_value = isset($form_state_value[$parent]) ? $form_state_value[$parent] : 0;
-    }
-    $element_value = $form_state_value;
-    return $element_value;
-  }
+function _jslider_field_jslider_process($element, &$form_state) {
+  $element = _jslider_field_jslider_element_structure($element, $form_state);
+  $element['#process_called'] = TRUE;
+  return $element;
 }
+
 
 /**
  * Validates jslider
@@ -293,18 +351,28 @@ function jslider_field_jslider_value_callback($element, $input = FALSE, $form_st
  */
 function jslider_field_jslider_validate($element, &$form_state) {
   $form_state_value = $form_state['values'];
-  $element['#parents'][] = 'slider';
   foreach ($element['#parents'] as $parent) {
     $form_state_value = isset($form_state_value[$parent]) ? $form_state_value[$parent] : 0;
   }
   $element_value = $form_state_value;
-  if (@isset($form_state['values']['instance']['settings']['min'])) {
-    $element['#max'] = $form_state['values']['instance']['settings']['max'];
-    $element['#min'] = $form_state['values']['instance']['settings']['min'];
-  }
-  if ($element_value['value'] > $element['#max'] || $element_value['value'] < $element['#min']
-    || (@$element_value['value2'] > $element['#max'] && @!is_null($element_value['value2'])) || (@$element_value['value2'] < $element['#min'] && @!is_null($element_value['value2']))) {
-    form_error($element, t("The entered values are not within valid range."));
+
+  #--(Begin)--> Correct the value
+  //watchdog('element_value', print_r($element_value['value'], true));
+  //form_set_value($element, $element_value, $form_state);
+  #--(End)--> Correct the value
+
+  if ($element['#validate_range']) {
+    if (@isset($form_state['values']['instance']['settings']['min'])) {
+      $element['#max'] = $form_state['values']['instance']['settings']['max'];
+      $element['#min'] = $form_state['values']['instance']['settings']['min'];
+    }
+    if ($element_value['value'] > $element['#max'] || $element_value['value'] < $element['#min']) {
+      form_error($element, t("The entered values are not within valid range."));
+    }
+    if (isset($element_value['value2']) && is_null($element_value['value2']))
+    if ($element_value['value2'] > $element['#max'] || $element_value['value2'] < $element['#min']) {
+      form_error($element, t("The entered values are not within valid range."));
+    }
   }
 }
 
@@ -314,7 +382,18 @@ function jslider_field_jslider_validate($element, &$form_state) {
  * @param array $element
  */
 function theme_jslider_field_jslider($vars) {
+  if (!isset($variables['element']['#process_called']) && 1==0) {
+    $element = _jslider_field_jslider_element_structure($variables['element']);
+    $html = '';
+    if (isset($element['slider'])) {
+      $html .= drupal_render($element['slider']);
+    }
+
+    return $html;
+  }
 }
+
+
 
 
 /**
@@ -381,9 +460,9 @@ function _jslider_field_field_widget_info_jslider() {
  */
 function _jslider_field_field_widget_settings_form_jslider($field, $instance) {
   $widget = $instance['widget'];
-  $settings = $widget['settings']['jslider_settings'];
 
   if ($widget['type'] == 'jslider') {
+    $settings = $widget['settings']['jslider_settings'];
     $form['jslider_settings'] = array(
       '#type' => 'fieldset',
       '#title' => t('jSlider Settings'),
@@ -438,15 +517,7 @@ function _jslider_field_field_widget_settings_form_jslider($field, $instance) {
     $form['jslider_settings']['slider_style'] = array(
       '#type' => 'select',
       '#title' => t('Style Style'),
-      '#options' => array(
-        '' => t('Default'),
-        'red' => t('Red'),
-        'green' => t('Green'),
-        'blue' => t('Blue'),
-        'orange' => t('Orange'),
-        'purple' => t('Purple'),
-        'orange_red' => t('Orange Red'),
-      ),
+      '#options' => jslider_field_get_styles(),
       '#description' => t('Some default color styles for ease of use'),
       '#default_value' => $settings['slider_style']
     );
@@ -489,7 +560,22 @@ function _jslider_field_field_widget_form(&$form, &$form_state, $field, $instanc
   switch ($instance['widget']['type']) {
     case 'jslider':
       $settings = $instance['widget']['settings']['jslider_settings'];
-      $element[$element['#field_name'] . '_jslider'] = array(
+      $value = NULL;
+      if (!empty($items)) {
+        $value = $items[$delta]['value']['value'];
+      } else {
+        $value = $instance['settings']['min'];
+      }
+
+      $element['#element_validate'] = array('jslider_field_jslider_container_validate');
+
+      //$element['#tree'] = FALSE;
+      $element['value'] = array(
+        //'#value_callback' => 'jslider_field_jslider_widget_value_callback',
+        //'#tree' => FALSE,
+        '#title' => $instance['label'],
+        '#default_value' => $value,
+        '#description' => $instance['description'],
         '#type' => 'jslider',
         '#input_title' => NULL,
         '#required' => $instance['required'],
@@ -501,16 +587,77 @@ function _jslider_field_field_widget_form(&$form, &$form_state, $field, $instanc
         '#orientation' => $settings['orientation'],
         '#range' => $settings['range'],
         '#step' => $settings['step'],
-        '#value' => 0,
-        '#value2' => NULL, //When using range
         '#slider_style' => $settings['slider_style'],
         '#size' => 3,
         '#display_inputs' => !$settings['hide_inputs'],
         '#display_values' => $settings['display_values'],
         '#slider_length' => $settings['slider_length'],
-        '#display_inside_fieldset' => FALSE
+        '#display_inside_fieldset' => FALSE,
+        '#validate_range' => FALSE
       );
       break;
   }
   return $element;
 }
+
+
+function jslider_field_jslider_container_validate($element, &$form_state) {
+  $form_state_value = $form_state['values'];
+  foreach ($element['#parents'] as $parent) {
+    $form_state_value = isset($form_state_value[$parent]) ? $form_state_value[$parent] : 0;
+  }
+  $element_value = $form_state_value;
+  if (isset($element_value['value'])) {
+    $element_value = $element_value['value'];
+  }
+  #--(Begin)--> Correct the value
+  form_set_value($element, $element_value, $form_state);
+  #--(End)--> Correct the value
+}
+
+/**
+ * @param $entity_type
+ * @param $entity
+ * @param $field
+ * @param $instance
+ * @param $langcode
+ * @param $items
+ * @param $errors
+ */
+function jslider_field_field_validate($entity_type, $entity, $field, $instance, $langcode, $items, &$errors) {
+  dpm('test');
+  foreach ($items as $delta => $item) {
+
+    if (!empty($item['value'])) {
+
+    }
+  }
+}
+
+
+/**
+ * @param $element
+ * @param bool $input
+ * @param $form_state
+ * @return mixed
+ */
+function jslider_field_jslider_widget_value_callback(&$element, $input = FALSE, $form_state = NULL) {
+  /*
+  dpm('test');
+  //return 100;
+  if ($input) {
+    //dpm($form_state);
+    //dpm($element);
+    $form_state_value = $form_state['input'];
+    //$element['#parents'][] = 'value';
+    foreach ($element['#parents'] as $parent) {
+      $form_state_value = isset($form_state_value[$parent]) ? $form_state_value[$parent] : 0;
+    }
+    $element_value = $form_state_value;
+    //dpm($element_value);
+    return $element_value;
+  }
+  */
+}
+
+
