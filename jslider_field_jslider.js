@@ -155,7 +155,6 @@
 
     $slider_id = $slider.attr('id');
     var setting = Drupal.settings['jslider_field_' + $slider_id];
-
     // Sync other sliders in the same group
     if (setting.group) {
       var $group_sliders = $('.jslider:[id!="' + $slider_id + '"].jslider-group-' + setting.group);
@@ -178,6 +177,9 @@
     if (ui.value) {
       setting.value = ui.value;
     }
+
+    //Manually trigger element change event for compatibility with Drupal's ajax system
+    $slider.find('.jslider-event-field').trigger('change');
   }
 
   // Slider processor
