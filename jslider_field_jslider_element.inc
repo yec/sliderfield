@@ -627,7 +627,6 @@ function jslider_field_jslider_container_validate($element, &$form_state) {
  * @param $errors
  */
 function jslider_field_field_validate($entity_type, $entity, $field, $instance, $langcode, $items, &$errors) {
-  dpm('test');
   foreach ($items as $delta => $item) {
 
     if (!empty($item['value'])) {
