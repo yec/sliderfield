@@ -13,6 +13,21 @@ INSTALLATION
 
 Enable the module at Administer >> Modules.
 
+FEATURES
+============
+
+- Simple field Widgets that adds slider to integer fields
+- Transfer slider widget from jslider_form_api
+- Group sliding that allows linking sliders to each other in various ways
+- Form API element for using slider in custom forms
+- Slider color sets
+- Ajax support
+- Supports most of jquery slider parameters like orientation, disable/enable , animation , step, etc for both UI and Form Element
+- Setting default length for slider
+- Adjustable slider widget that allows changing slider range dynamically
+- Supports all numeric field types
+- Supports integer , float and decimal numbers as step
+
 
 USAGE
 ============
