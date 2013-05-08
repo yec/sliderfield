@@ -28,6 +28,18 @@ function _jslider_field_element_info_jslider() {
     '#input_title' => t('Min'),
     '#input2_title' => t('Max'),
     /**
+    * Make the min value adjustable dynamically via another element
+    * Type of the value is CSS selector
+    * like .myfield, #element_id
+    */
+    '#adjust_field_min' => NULL,
+    /**
+    * Make the max value adjustable dynamically via another element
+    * Type of the value is CSS selector
+    * like .myfield, #element_id
+    */
+    '#adjust_field_max' => NULL,
+    /**
      * Boolean: When set to true, the handle will animate with the default duration.
      * String: The name of a speed, such as "fast" or "slow".
      * Number: The duration of the animation, in milliseconds.
@@ -416,14 +428,12 @@ function _jslider_field_field_widget_info_jslider() {
           'animate' => TRUE,
 		  /**
 		  * Make the min value adjustable dynamically via another element
-		  * Type of the value CSS selector
-		  * like .myfield, #element_id
+		  * Type of the value is field name
 		  */
           'adjust_field_min' => NULL,
 		  /**
 		  * Make the max value adjustable dynamically via another element
-		  * Type of the value CSS selector
-		  * like .myfield, #element_id
+		  * Type of the value is field name
 		  */
           'adjust_field_max' => NULL,
           /**
