@@ -47,6 +47,18 @@ function example_form() {
      */
     '#animate' => 'fast',
     /**
+    * Make the min value adjustable dynamically via another element
+    * Type of the value CSS selector
+    * like .myfield, #element_id
+    */
+    'adjust_field_min' => NULL,
+    /**
+    * Make the max value adjustable dynamically via another element
+    * Type of the value CSS selector
+    * like .myfield, #element_id
+    */
+    'adjust_field_max' => NULL,
+    /**
      * Disables the slider if set to true.
      */
     '#disabled' => FALSE,

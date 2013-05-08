@@ -48,6 +48,27 @@
         }
 
         jslidersSlideUpdateFields($slider, {value: $value, values: $values});
+
+        // Adjust the range when the target field is changed
+        var adjust_field = $(setting.adjust_field_max_css_selector  + ',' + setting.adjust_field_min_css_selector);
+        if (adjust_field.length) {
+          adjust_field.bind('keyup', function(event) {
+		    var $target = $(event.target);
+		    var option_name = "";
+		    if ($target.hasClass(setting.adjust_field_min_css_selector.replace('.', ''))) {
+		      option_name = "min";
+		    } else if ($target.hasClass(setting.adjust_field_max_css_selector.replace('.', ''))) {
+		      option_name = "max";
+		    }
+		    var $jSlider = $slider.find('.jslider-container', context);
+			$jSlider.slider("option", option_name, parseInt($target.val()));
+            $jSlider.slider("option", {
+              "value" : $jSlider.slider('value'),
+              "values" : $jSlider.slider('values')
+            });
+          });
+        }
+
       });
 
 

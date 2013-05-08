@@ -131,3 +131,15 @@ function jslider_field_get_styles($default = FALSE) {
 
   return $items;
 }
+
+
+/**
+ * Implements hook_field_widget_form_alter().
+ *
+ * Add a css class to adjustment form elements, to enable them to be targeted
+ * by the appropriate javascript.
+ */
+function jslider_field_field_widget_form_alter(&$element, &$form_state, $context) {
+  require_once('jslider_field_jslider_element.inc');
+  _jslider_field_jslider_widget_field_widget_form_alter($element, $form_state, $context);
+}

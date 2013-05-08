@@ -288,6 +288,8 @@ function _jslider_field_jslider_element_structure($element, &$form_state) {
           'data' => array(
             'jslider_field_' . $element['#id'] => array(
               'animate' => $element['#animate'],
+              'adjust_field_min_css_selector' => $element['#adjust_field_min'],
+              'adjust_field_max_css_selector' => $element['#adjust_field_max'],
               'disabled' => $element['#disabled'],
               'max' => $element['#max'] * 1,
               'min' => $element['#min'] * 1,
@@ -412,6 +414,18 @@ function _jslider_field_field_widget_info_jslider() {
            * Number: The duration of the animation, in milliseconds.
            */
           'animate' => TRUE,
+		  /**
+		  * Make the min value adjustable dynamically via another element
+		  * Type of the value CSS selector
+		  * like .myfield, #element_id
+		  */
+          'adjust_field_min' => NULL,
+		  /**
+		  * Make the max value adjustable dynamically via another element
+		  * Type of the value CSS selector
+		  * like .myfield, #element_id
+		  */
+          'adjust_field_max' => NULL,
           /**
            * Determines whether the slider handles move horizontally (min on left, max on right)
            * or vertically (min on bottom, max on top). Possible values: "horizontal", "vertical".
@@ -470,6 +484,39 @@ function _jslider_field_field_widget_settings_form_jslider($field, $instance) {
       '#collapsed' => FALSE,
 	  '#weight' => 0
     );
+
+    $entity_fields = field_info_instances($instance['entity_type'], $instance['bundle']);
+    $all_fields = field_info_fields();
+    $supported_field_types = array('number_decimal', 'number_integer', 'number_float');
+    $valid_fields = array();
+
+    // Get a list of all valid fields that we both support and are part of this entity
+    foreach ($all_fields as $_field) {
+      if (array_key_exists($_field['field_name'], $entity_fields)) {
+        if (in_array($_field['type'], array_values($supported_field_types)) && ($_field['field_name'] != $field['field_name'])) {
+          $valid_fields[$_field['field_name']] = $entity_fields[$_field['field_name']]['label'];
+        }
+      }
+    }
+
+    $valid_fields = array('' => '--') + $valid_fields;
+    $form['jslider_settings']['adjust_field_min'] = array(
+      '#type' => 'select',
+      '#title' => t('Adjust the Minimum value from field'),
+      '#default_value' => isset($settings['adjust_field_min']) ? $settings['adjust_field_min']: '',
+      '#options' => $valid_fields,
+      '#description' => t('Select which field you would like to use to adjust the slider\'s Minimum value.'),
+    );
+
+	$valid_fields = array('' => '--') + $valid_fields;
+    $form['jslider_settings']['adjust_field_max'] = array(
+      '#type' => 'select',
+      '#title' => t('Adjust the Maximum value from field'),
+      '#default_value' => isset($settings['adjust_field_max']) ? $settings['adjust_field_max']: '',
+      '#options' => $valid_fields,
+      '#description' => t('Select which field you would like to use to adjust the slider\'s Maximum value.'),
+    );
+
     $form['jslider_settings']['animate'] = array(
       '#type' => 'select',
       '#title' => t('Animate'),
@@ -582,6 +629,8 @@ function _jslider_field_field_widget_form(&$form, &$form_state, $field, $instanc
         '#required' => $instance['required'],
         '#input2_title' => t('Max'),
         '#animate' => $settings['animate'],
+        '#adjust_field_min' => isset($settings['adjust_field_min'])? '.' . drupal_clean_css_identifier('jslider-field-adjust-' . $settings['adjust_field_min']) : '',
+        '#adjust_field_max' => isset($settings['adjust_field_max'])? '.' . drupal_clean_css_identifier('jslider-field-adjust-' . $settings['adjust_field_max']) : '',
         '#disabled' => FALSE,
         '#max' => $instance['settings']['max'],
         '#min' => $instance['settings']['min'],
@@ -672,4 +721,31 @@ function _jslider_field_form_field_ui_field_edit_form_alter_jslider(&$form, &$fo
     $form['instance']['settings']['min']['#required'] = TRUE;
     $form['instance']['settings']['max']['#required'] = TRUE;
   }
+}
+
+
+/**
+ * Implements hook_field_widget_form_alter().
+ *
+ * Add a css class to adjustment form elements, to enable them to be targeted
+ * by the appropriate javascript.
+ */
+function _jslider_field_jslider_widget_field_widget_form_alter(&$element, &$form_state, $context) {
+  $instance = $context['instance'];
+  if ($instance['widget']['type'] == 'number') {
+    $entity_fields = field_info_instances($instance['entity_type'], $instance['bundle']);
+    if (array_key_exists($instance['field_name'], $entity_fields)) {
+      $element['value']['#process'][] = '_jslider_field_jslider_widget_adjust_process';
+    }
+  }
+}
+
+/**
+ * Helper function to add css class to adjustment elements.
+ */
+function _jslider_field_jslider_widget_adjust_process($element, &$form_state, $form) {
+  $instance = field_widget_instance($element, $form_state);
+  $widget_settings = $instance['widget']['settings'];
+  $element['#attributes']['class'][] = 'jslider-field-adjust-'.drupal_clean_css_identifier($element['#field_name']);
+  return $element;
 }
