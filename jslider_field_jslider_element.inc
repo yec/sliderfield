@@ -264,7 +264,7 @@ function _jslider_field_jslider_element_structure($element, &$form_state) {
     );
   }
 
-  if ($element['#range'] === TRUE && is_null($element['#value2'])) {
+  if ($element['#range'] === TRUE && (!isset($element['#value2']) || is_null($element['#value2']))) {
     $element['#range'] = FALSE;
   }
 
