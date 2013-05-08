@@ -468,6 +468,7 @@ function _jslider_field_field_widget_settings_form_jslider($field, $instance) {
       '#title' => t('jSlider Settings'),
       '#collapsible' => TRUE,
       '#collapsed' => FALSE,
+	  '#weight' => 0
     );
     $form['jslider_settings']['animate'] = array(
       '#type' => 'select',
@@ -516,7 +517,7 @@ function _jslider_field_field_widget_settings_form_jslider($field, $instance) {
     );
     $form['jslider_settings']['slider_style'] = array(
       '#type' => 'select',
-      '#title' => t('Style Style'),
+      '#title' => t('Style'),
       '#options' => jslider_field_get_styles(),
       '#description' => t('Some default color styles for ease of use'),
       '#default_value' => $settings['slider_style']
@@ -559,6 +560,7 @@ function _jslider_field_field_widget_settings_form_jslider($field, $instance) {
 function _jslider_field_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
   switch ($instance['widget']['type']) {
     case 'jslider':
+	  dpm($instance);
       $settings = $instance['widget']['settings']['jslider_settings'];
       $value = NULL;
 
