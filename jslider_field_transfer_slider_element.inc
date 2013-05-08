@@ -91,14 +91,3 @@ function theme_transfer_slider($vars) {
   drupal_add_js($path . '/jslider_field_transfer_slider.js');
   drupal_add_css($path . '/jslider_field_transfer_slider.css');
 }
-
-/**
- * @param $form
- * @param $form_state
- */
-function _jslider_field_form_field_ui_field_edit_form_alter_jslider(&$form, &$form_state) {
-  if ($form['#field']['type'] == 'number_integer' && $form['#instance']['widget']['type'] == 'jslider') {
-    $form['instance']['settings']['min']['#required'] = TRUE;
-    $form['instance']['settings']['max']['#required'] = TRUE;
-  }
-}

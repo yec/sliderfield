@@ -197,7 +197,7 @@ function _jslider_field_jslider_element_structure($element, &$form_state) {
     '#prefix'           => '<div id="' . $element['#id'] . '" class="jslider ' . $group_css . '">',
     '#type'             => 'textfield',
     '#required'    => $element['#required'],
-    '#element_validate' => array('jslider_field_validate_integer'),
+    '#element_validate' => array('jslider_field_validate_number'),
     '#title'             => $element['#input_title'],
     '#default_value'    => $value,
     '#disabled'    => $element['#disabled'],
@@ -245,7 +245,7 @@ function _jslider_field_jslider_element_structure($element, &$form_state) {
       '#default_value'    => $value2,
       '#required'    => $element['#required'],
       '#title'             => $element['#input2_title'],
-      '#element_validate' => array('jslider_field_validate_integer'),
+      '#element_validate' => array('jslider_field_validate_number'),
       '#disabled'    => $element['#disabled'],
       '#size'             => $element['#size'],
       '#attributes'       => array('class' => array('jslider-value2-field')),
@@ -403,7 +403,7 @@ function _jslider_field_field_widget_info_jslider() {
   return array(
     'jslider' => array(
       'label' => t('jSlider'),
-      'field types' => array('number_integer'),
+      'field types' => array('number_decimal', 'number_integer', 'number_float'),
       'settings' => array(
         'jslider_settings' => array(
           /**
@@ -512,7 +512,7 @@ function _jslider_field_field_widget_settings_form_jslider($field, $instance) {
       '#size' => 5,
       '#description' => t('Determines the size or amount of each interval or step the slider takes between the min and max. The full specified value range of the slider (max - min) should be evenly divisible by the step.'),
       '#required' => TRUE,
-      '#element_validate' => array('element_validate_integer_positive'),
+      '#element_validate' => array('jslider_field_validate_positive_number'),
       '#default_value' => $settings['step']
     );
     $form['jslider_settings']['slider_style'] = array(
@@ -560,7 +560,6 @@ function _jslider_field_field_widget_settings_form_jslider($field, $instance) {
 function _jslider_field_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
   switch ($instance['widget']['type']) {
     case 'jslider':
-	  dpm($instance);
       $settings = $instance['widget']['settings']['jslider_settings'];
       $value = NULL;
 
@@ -662,3 +661,15 @@ function jslider_field_jslider_widget_value_callback(&$element, $input = FALSE, 
 }
 
 
+/**
+ * @param $form
+ * @param $form_state
+ */
+function _jslider_field_form_field_ui_field_edit_form_alter_jslider(&$form, &$form_state) {
+  if ($form['#instance']['widget']['type'] == 'jslider') {
+    $form['instance']['settings']['min']['#weight'] = 0;
+	$form['instance']['settings']['max']['#weight'] = 0;
+    $form['instance']['settings']['min']['#required'] = TRUE;
+    $form['instance']['settings']['max']['#required'] = TRUE;
+  }
+}

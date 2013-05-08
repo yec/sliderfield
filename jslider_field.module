@@ -85,9 +85,25 @@ function jslider_field_form_field_ui_field_edit_form_alter(&$form, &$form_state)
  * @param $element
  * @param $form_state
  */
-function jslider_field_validate_integer($element, &$form_state) {
-  if (!ctype_digit($element['#value'])) {
-    form_error($element, t('The value should be a valid integer number'));
+function jslider_field_validate_number($element, &$form_state) {
+  //!ctype_digit($element['#value'])
+  if (!is_numeric($element['#value'])) {
+    form_error($element, t('The value should be a valid number'));
+	return TRUE;
+  }
+}
+
+/**
+ * Function to validate integer numbers
+ *
+ * @param $element
+ * @param $form_state
+ */
+function jslider_field_validate_positive_number($element, &$form_state) {
+  if (jslider_field_validate_number($element, &$form_state)) {
+    if ($element['#value'] > 0) {
+      form_error($element, t('The value should be a valid positive number'));
+	}
   }
 }
 
