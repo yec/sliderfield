@@ -8,7 +8,7 @@ All slider parameters are configurable either as parameters for form element or 
 FEATURES
 ============
 
-- Simple field Widgets that adds slider to integer fields
+- A widget that adds slider to numeric fields
 - Group sliding : by using it one can connect several sliders, the result is
   by changing one slider the others sliders linked to it will also change. There are several group types that 
   indicate how the other sliders change. Look for "group" 
@@ -204,5 +204,5 @@ Contributors
 ============
 - Version 1 : Jonathan Rowny (jrowny), www.jonathanrowny.com
 - Version 1 : Tom Kirkpatrick (mrfelton), www.systemseed.com
-- Version 2 base code : Roman Grachev (http://graker.ru/) , Maslouski Yauheni (http://drupalace.ru/)
+- Version 2 Transfer Slider code from "jSlider Form API" : Roman Grachev (http://graker.ru/) , Maslouski Yauheni (http://drupalace.ru/)
 - Version 2 : Sina Salek (http://sina.salek.ws) Merged in from jslider_field module
