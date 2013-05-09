@@ -37,16 +37,16 @@ jslider_field module users can also easily migrate :
 - Download and install sliderfield version 1
 - Download sliderfield version 2 and call upgrade.php
 
-USAGE
+DOCUMENTATION
 ============
 
 For Field Widget you can use "Slider Field" as widget for any numeric field type
 
-You may use Forms API element type jslider
+You may use Forms API element type slider or transfer_slider
+
+For demonstration you can can enable sliderfield_example module and visit examples/sliderfield
 
 Example:
-
-function example_form() {
 
   $form['slider'] = array(
     '#type' => 'transfer_slider',
@@ -177,38 +177,6 @@ function example_form() {
      */
     '#validate_range' => TRUE
   );
-
-  $form['slider2'] = array(
-    '#title' => 'slider',
-    '#type' => 'jslider',
-    '#value' => 10,
-    '#value2' => 500,
-    //'#orientation' => 'vertical',
-    '#slider_style' => 'blue',
-    '#range' => TRUE,
-    '#min' => 10,
-    '#max' => 1000,
-    '#step' => 100,
-    //'#required' => 1,
-    //'#disabled' => TRUE,
-    //'#display_inputs' => FALSE,
-    '#display_values' => TRUE,
-    '#slider_length' => '100px',
-  );
-  
-  $form['submit'] = array(
-    '#type' => 'submit',
-    '#value' => t('Submit'),
-  );
-  
-  return $form;
-}
-
-function example_form_submit($form, &$form_state) {
-  $left_value   = $form_state['values']['slider']['left'];
-  $right_value  = $form_state['values']['slider']['right'];  
-  drupal_set_message(t('Left value is !left_value. Right value is !right_value.', array('!left_value' => $left_value, '!right_value' => $right_value)));
-}
 
 Contributors
 ============
