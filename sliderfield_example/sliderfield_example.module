@@ -183,13 +183,13 @@ function sliderfield_example_custom_form($form, &$form_state) {
      */
     '#validate_range' => TRUE
   );
-
+  
   $form['slider2'] = array(
     '#title' => 'Range Slider',
     '#type' => 'slider',
-    '#default_value' => array(20, 50),
+    '#default_value' => array('value' => 200, 'value2' => 700),
     //'#orientation' => 'vertical',
-    '#slider_style' => 'blue',
+    '#slider_style' => 'orange',
     '#range' => TRUE,
     '#min' => 10,
     '#max' => 1000,
@@ -197,6 +197,40 @@ function sliderfield_example_custom_form($form, &$form_state) {
     //'#required' => 1,
     //'#disabled' => TRUE,
     //'#display_inputs' => FALSE,
+    '#display_values' => TRUE,
+    '#slider_length' => '100px',
+  );
+  
+  $form['slider3'] = array(
+    '#title' => 'Slider Min',
+    '#type' => 'slider',
+    '#default_value' => 50,
+    //'#orientation' => 'vertical',
+    '#slider_style' => 'blue',
+    '#range' => 'min',
+    '#min' => 1,
+    '#max' => 100,
+    '#step' => 1,
+    //'#required' => 1,
+    //'#disabled' => TRUE,
+    '#display_inputs' => FALSE,
+    '#display_values' => TRUE,
+    '#slider_length' => '100px',
+  );
+  
+  $form['slider4'] = array(
+    '#title' => 'Vertical Slider Max',
+    '#type' => 'slider',
+    '#default_value' => 50,
+    '#orientation' => 'vertical',
+    '#slider_style' => 'green',
+    '#range' => 'max',
+    '#min' => 1,
+    '#max' => 100,
+    '#step' => 1,
+    //'#required' => 1,
+    //'#disabled' => TRUE,
+    '#display_inputs' => FALSE,
     '#display_values' => TRUE,
     '#slider_length' => '100px',
   );
