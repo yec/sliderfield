@@ -1,24 +1,17 @@
 DESCRIPTION
 ============
 
-Integrates jQuery Slider with Drupal.
-It provides two form elements, jslider & transfer_slider and one widget for integer fields
+Integrates jQuery UI Slider with Drupal.
+It provides one form element and one widget
 All slider parameters are configurable either as parameters for form element or in widget settings form
-It also offers a special feature called grouping, by using it one can connect several sliders, the result is
-by changing one slider the others sliders linked to it will also change. There are several group types that
-indicate how the other sliders change. Look for "group" in README file for further info
-
-INSTALLATION
-============
-
-Enable the module at Administer >> Modules.
 
 FEATURES
 ============
 
 - Simple field Widgets that adds slider to integer fields
-- Transfer slider widget from jslider_form_api
-- Group sliding that allows linking sliders to each other in various ways
+- Group sliding : by using it one can connect several sliders, the result is
+  by changing one slider the others sliders linked to it will also change. There are several group types that 
+  indicate how the other sliders change. Look for "group" 
 - Form API element for using slider in custom forms
 - Slider color sets
 - Ajax support
@@ -28,29 +21,34 @@ FEATURES
 - Supports all numeric field types
 - Supports integer , float and decimal numbers as step
 
+INSTALLATION
+============
+
+Enable the module at Administer >> Modules.
+
+UPGRADE
+============
+All the features of SliderField v1 is supported, simple use upgrade.php
+and apply the pending updates
+
+MIGRADE
+============
+jslider_field module users can also easily migrate :
+- Download and install sliderfield version 1
+- Download sliderfield version 2 and call upgrade.php
 
 USAGE
 ============
 
-For Field Widget you can use jSlider as widget for any integer filefiled
+For Field Widget you can use "Slider Field" as widget for any numeric field type
 
-You may user new Forms API element type: transfer_slider or jslider
+You may use Forms API element type jslider
 
 Example:
 
 function example_form() {
 
-  $form['slider'] = array(
-    '#type' => 'transfer_slider',
-    '#title' => t('Slider test'),
-    '#left_value' => 0,
-    '#right_value' => 200,
-    '#left' => t('Left input'),
-    '#right' => t('Right input'),
-    '#size' => 4,
-  );
-
-  $form['slider2'] = array(
+  $form['slider1'] = array(
     '#title' => NULL,
     '#title2' => NULL,
     '#input_title' => t('Min'),
@@ -202,8 +200,9 @@ function example_form_submit($form, &$form_state) {
   drupal_set_message(t('Left value is !left_value. Right value is !right_value.', array('!left_value' => $left_value, '!right_value' => $right_value)));
 }
 
-DEVELOPERS
-===========
-
-Original code : Roman Grachev (http://graker.ru/) , Maslouski Yauheni (http://drupalace.ru/)
-Fork : Sina Salek (http://sina.salek.ws)
+Contributors
+============
+- Version 1 : Jonathan Rowny (jrowny), www.jonathanrowny.com
+- Version 1 : Tom Kirkpatrick (mrfelton), www.systemseed.com
+- Version 2 base code : Roman Grachev (http://graker.ru/) , Maslouski Yauheni (http://drupalace.ru/)
+- Version 2 : Sina Salek (http://sina.salek.ws) Merged in from jslider_field module
