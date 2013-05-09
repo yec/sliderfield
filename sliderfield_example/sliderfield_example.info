@@ -1,0 +1,6 @@
+name = SliderField Example
+description = Set of example for SliderField (Visit examples/sliderfield)
+package = Fields
+version = "7.x-1.0"
+core = 7.x
+dependencies[] = sliderfield
