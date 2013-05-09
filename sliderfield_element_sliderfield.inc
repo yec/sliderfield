@@ -620,8 +620,7 @@ function _sliderfield_field_widget_form(&$form, &$form_state, $field, $instance,
     case 'sliderfield':
       $settings = $instance['widget']['settings']['sliderfield_settings'];
       $value = NULL;
-
-      if (!empty($items)) {
+      if (!empty($items) && isset($items[$delta])) {
         $value = $items[$delta]['value'];
       } else {
         $value = $instance['settings']['min'];
