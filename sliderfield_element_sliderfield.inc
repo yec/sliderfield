@@ -185,15 +185,15 @@ function _sliderfield_element_sliderfield_structure($element, &$form_state) {
     */
   }
 
-  if ($element['#value'] < $element['#min']) {
-    $element['#value'] = $element['#min'];
+  if ($value < $element['#min']) {
+    $value = $element['#min'];
   }
-  if ($element['#value'] > $element['#max']) {
-    $element['#value'] = $element['#max'];
+  if ($value > $element['#max']) {
+    $value = $element['#max'];
   }
 
   $values = array();
-  $values[] = $element['#value'];
+  $values[] = $value;
 
   $group_css = '';
   if ($element['#group']) {
@@ -242,17 +242,17 @@ function _sliderfield_element_sliderfield_structure($element, &$form_state) {
 
   if (!is_null($value2)) {
 
-    if ($element['#value2'] < $element['#min']) {
-      $element['#value2'] = $element['#min'];
+    if ($value2 < $element['#min']) {
+      $value2 = $element['#min'];
     }
-    if ($element['#value2'] > $element['#max']) {
-      $element['#value2'] = $element['#max'];
+    if ($value2 > $element['#max']) {
+      $value2 = $element['#max'];
     }
 
-    if ($element['#value2'] < $element['#value']) {
-      $element['#value2'] = $element['#value'];
+    if ($value2 < $value) {
+      $value2 = $value;
     }
-    $values[] = $element['#value2'];
+    $values[] = $value2;
     $element['value2'] = array(
       '#type'             => 'textfield',
       '#default_value'    => $value2,
@@ -265,7 +265,7 @@ function _sliderfield_element_sliderfield_structure($element, &$form_state) {
     );
   }
 
-  if ($element['#range'] === TRUE && (!isset($element['#value2']) || is_null($element['#value2']))) {
+  if ($element['#range'] === TRUE && (!isset($value2) || is_null($value2))) {
     $element['#range'] = FALSE;
   }
 
