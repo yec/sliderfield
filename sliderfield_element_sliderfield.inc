@@ -15,7 +15,7 @@ function _sliderfield_theme_sliderfield() {
  * Implements hook_element_info().
  */
 function _sliderfield_element_info_sliderfield() {
-  $types['sliderfield'] =  array(
+  $types['slider'] =  array(
     '#input'            => TRUE,
     '#process'          => array('_sliderfield_sliderfield_process'),
     //'#value_callback'   => 'sliderfield_sliderfield_value_callback',
@@ -141,6 +141,7 @@ function _sliderfield_element_info_sliderfield() {
      */
     '#validate_range' => TRUE
   );
+  $types['jslider'] = $types['slider'];
   return $types;
 }
 
@@ -416,7 +417,7 @@ function theme_sliderfield_sliderfield($vars) {
 function _sliderfield_field_widget_info_sliderfield() {
   return array(
     'sliderfield' => array(
-      'label' => t('sliderfield'),
+      'label' => t('Slider'),
       'field types' => array('number_decimal', 'number_integer', 'number_float'),
       'settings' => array(
         'sliderfield_settings' => array(
@@ -489,7 +490,7 @@ function _sliderfield_field_widget_settings_form_sliderfield($field, $instance) 
     $settings = $widget['settings']['sliderfield_settings'];
     $form['sliderfield_settings'] = array(
       '#type' => 'fieldset',
-      '#title' => t('sliderfield Settings'),
+      '#title' => t('Slider Settings'),
       '#collapsible' => TRUE,
       '#collapsed' => FALSE,
 	  '#weight' => 0
@@ -634,7 +635,7 @@ function _sliderfield_field_widget_form(&$form, &$form_state, $field, $instance,
         '#title' => $instance['label'],
         '#default_value' => $value,
         '#description' => $instance['description'],
-        '#type' => 'sliderfield',
+        '#type' => 'slider',
         '#input_title' => NULL,
         '#required' => $instance['required'],
         '#input2_title' => t('Max'),
