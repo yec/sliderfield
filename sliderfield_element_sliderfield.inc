@@ -3,10 +3,10 @@
 /**
  * Implements hook_theme().
  */
-function _jslider_field_theme_jslider() {
-  $data['jslider_field_jslider'] = array(
+function _sliderfield_theme_sliderfield() {
+  $data['sliderfield_sliderfield'] = array(
     'render element' => 'element',
-    'file' => 'jslider_field_jslider_element.inc',
+    'file' => 'sliderfield_element_sliderfield.inc',
   );
   return $data;
 }
@@ -14,13 +14,13 @@ function _jslider_field_theme_jslider() {
 /**
  * Implements hook_element_info().
  */
-function _jslider_field_element_info_jslider() {
-  $types['jslider'] =  array(
+function _sliderfield_element_info_sliderfield() {
+  $types['sliderfield'] =  array(
     '#input'            => TRUE,
-    '#process'          => array('_jslider_field_jslider_process'),
-    //'#value_callback'   => 'jslider_field_jslider_value_callback',
-    '#element_validate' => array('jslider_field_jslider_validate'),
-    '#theme'   => array('jslider_field_jslider'),
+    '#process'          => array('_sliderfield_sliderfield_process'),
+    //'#value_callback'   => 'sliderfield_sliderfield_value_callback',
+    '#element_validate' => array('sliderfield_sliderfield_validate'),
+    '#theme'   => array('sliderfield_sliderfield'),
     '#theme_wrappers'   => array('form_element'),
 
     '#title' => NULL,
@@ -148,7 +148,7 @@ function _jslider_field_element_info_jslider() {
  * Processes transfer slider: add textfields
  * @param unknown_type $element
  */
-function _jslider_field_jslider_element_structure($element, &$form_state) {
+function _sliderfield_element_sliderfield_structure($element, &$form_state) {
   $element['#tree'] = TRUE;
   /*
   $values = NULL;
@@ -196,25 +196,25 @@ function _jslider_field_jslider_element_structure($element, &$form_state) {
 
   $group_css = '';
   if ($element['#group']) {
-    $group_css = 'jslider-group-' . $element['#group'];
+    $group_css = 'sliderfield-group-' . $element['#group'];
 
     if ($element['#group_master']) {
-      $group_css .= ' jslider-group-master';
+      $group_css .= ' sliderfield-group-master';
     }
   }
 
   // Generate input for slider
   $element['value'] = array(
     '#tree'             => TRUE,
-    '#prefix'           => '<div id="' . $element['#id'] . '" class="jslider ' . $group_css . '">',
+    '#prefix'           => '<div id="' . $element['#id'] . '" class="sliderfield ' . $group_css . '">',
     '#type'             => 'textfield',
     '#required'    => $element['#required'],
-    '#element_validate' => array('jslider_field_validate_number'),
+    '#element_validate' => array('sliderfield_validate_number'),
     '#title'             => $element['#input_title'],
     '#default_value'    => $value,
     '#disabled'    => $element['#disabled'],
     '#size'             => $element['#size'],
-    '#attributes'       => array('class' => array('jslider-value-field')),
+    '#attributes'       => array('class' => array('sliderfield-value-field')),
   );
 
   #--(Begin)--> For Ajax compatibiitly
@@ -229,12 +229,12 @@ function _jslider_field_jslider_element_structure($element, &$form_state) {
     }
     // Generate input for slider
     $element['hidden_item'] = array(
-      '#prefix' => '<div class="jslider-event-field-container">',
+      '#prefix' => '<div class="sliderfield-event-field-container">',
       '#suffix' => '</div>',
       '#type'             => 'textfield',
       '#default_value'    => $element['#default_value'],
       '#ajax'             => $ajax,
-      '#attributes'       => array('style' => 'display:none;', 'class' => array('jslider-event-field')),
+      '#attributes'       => array('style' => 'display:none;', 'class' => array('sliderfield-event-field')),
     );
   }
   #--(End)--> For Ajax compatibiitly
@@ -257,10 +257,10 @@ function _jslider_field_jslider_element_structure($element, &$form_state) {
       '#default_value'    => $value2,
       '#required'    => $element['#required'],
       '#title'             => $element['#input2_title'],
-      '#element_validate' => array('jslider_field_validate_number'),
+      '#element_validate' => array('sliderfield_validate_number'),
       '#disabled'    => $element['#disabled'],
       '#size'             => $element['#size'],
-      '#attributes'       => array('class' => array('jslider-value2-field')),
+      '#attributes'       => array('class' => array('sliderfield-value2-field')),
     );
   }
 
@@ -273,7 +273,7 @@ function _jslider_field_jslider_element_structure($element, &$form_state) {
       $values[$key] = str_replace('%{value}%', $value ,$element['#display_values_format']);
     }
     $element['values_text'] = array(
-      '#markup'     => '<div class="jslider-display-values-field">' . htmlentities(implode(' - ',  $values)) . '</div>'
+      '#markup'     => '<div class="sliderfield-display-values-field">' . htmlentities(implode(' - ',  $values)) . '</div>'
     );
   }
 
@@ -289,16 +289,16 @@ function _jslider_field_jslider_element_structure($element, &$form_state) {
  // Create markup for slider container
   $element['container'] = array(
     '#type' => 'container',
-    '#attributes' => array('class' => array('jslider-container', $element['#slider_style']), 'style' => $style),
+    '#attributes' => array('class' => array('sliderfield-container', $element['#slider_style']), 'style' => $style),
     '#attached' => array(
       'library' => array(
         array('system', 'ui.slider')
       ),
       'js' => array(
-        drupal_get_path('module', 'jslider_field') . '/jslider_field_jslider.js',
+        drupal_get_path('module', 'sliderfield') . '/sliderfield_element_sliderfield.js',
         array(
           'data' => array(
-            'jslider_field_' . $element['#id'] => array(
+            'sliderfield_' . $element['#id'] => array(
               'animate' => $element['#animate'],
               'adjust_field_min_css_selector' => $element['#adjust_field_min'],
               'adjust_field_max_css_selector' => $element['#adjust_field_max'],
@@ -321,7 +321,7 @@ function _jslider_field_jslider_element_structure($element, &$form_state) {
       ),
       'css' => array(
         array(
-          'data' => drupal_get_path('module', 'jslider_field') . '/jslider_field_jslider.css',
+          'data' => drupal_get_path('module', 'sliderfield') . '/sliderfield_element_sliderfield.css',
           'type' => 'file',
           //'group' => CSS_SYSTEM,
           'weight' => 2000,
@@ -350,20 +350,20 @@ function _jslider_field_jslider_element_structure($element, &$form_state) {
  * Processes transfer slider: add textfields
  * @param unknown_type $element
  */
-function _jslider_field_jslider_process($element, &$form_state) {
-  $element = _jslider_field_jslider_element_structure($element, $form_state);
+function _sliderfield_sliderfield_process($element, &$form_state) {
+  $element = _sliderfield_element_sliderfield_structure($element, $form_state);
   $element['#process_called'] = TRUE;
   return $element;
 }
 
 
 /**
- * Validates jslider
+ * Validates sliderfield
  *
  * @param array $element
  * @param array $form_state
  */
-function jslider_field_jslider_validate($element, &$form_state) {
+function sliderfield_sliderfield_validate($element, &$form_state) {
   $form_state_value = $form_state['values'];
   foreach ($element['#parents'] as $parent) {
     $form_state_value = isset($form_state_value[$parent]) ? $form_state_value[$parent] : 0;
@@ -391,13 +391,13 @@ function jslider_field_jslider_validate($element, &$form_state) {
 }
 
 /**
- * Theme output of jslider
+ * Theme output of sliderfield
  *
  * @param array $element
  */
-function theme_jslider_field_jslider($vars) {
+function theme_sliderfield_sliderfield($vars) {
   if (!isset($variables['element']['#process_called']) && 1==0) {
-    $element = _jslider_field_jslider_element_structure($variables['element']);
+    $element = _sliderfield_element_sliderfield_structure($variables['element']);
     $html = '';
     if (isset($element['slider'])) {
       $html .= drupal_render($element['slider']);
@@ -413,13 +413,13 @@ function theme_jslider_field_jslider($vars) {
 /**
  *
  */
-function _jslider_field_field_widget_info_jslider() {
+function _sliderfield_field_widget_info_sliderfield() {
   return array(
-    'jslider' => array(
-      'label' => t('jSlider'),
+    'sliderfield' => array(
+      'label' => t('sliderfield'),
       'field types' => array('number_decimal', 'number_integer', 'number_float'),
       'settings' => array(
-        'jslider_settings' => array(
+        'sliderfield_settings' => array(
           /**
            * Boolean: When set to true, the handle will animate with the default duration.
            * String: The name of a speed, such as "fast" or "slow".
@@ -482,14 +482,14 @@ function _jslider_field_field_widget_info_jslider() {
  * @param $field
  * @param $instance
  */
-function _jslider_field_field_widget_settings_form_jslider($field, $instance) {
+function _sliderfield_field_widget_settings_form_sliderfield($field, $instance) {
   $widget = $instance['widget'];
 
-  if ($widget['type'] == 'jslider') {
-    $settings = $widget['settings']['jslider_settings'];
-    $form['jslider_settings'] = array(
+  if ($widget['type'] == 'sliderfield') {
+    $settings = $widget['settings']['sliderfield_settings'];
+    $form['sliderfield_settings'] = array(
       '#type' => 'fieldset',
-      '#title' => t('jSlider Settings'),
+      '#title' => t('sliderfield Settings'),
       '#collapsible' => TRUE,
       '#collapsed' => FALSE,
 	  '#weight' => 0
@@ -510,7 +510,7 @@ function _jslider_field_field_widget_settings_form_jslider($field, $instance) {
     }
 
     $valid_fields = array('' => '--') + $valid_fields;
-    $form['jslider_settings']['adjust_field_min'] = array(
+    $form['sliderfield_settings']['adjust_field_min'] = array(
       '#type' => 'select',
       '#title' => t('Adjust the Minimum value from field'),
       '#default_value' => isset($settings['adjust_field_min']) ? $settings['adjust_field_min']: '',
@@ -519,7 +519,7 @@ function _jslider_field_field_widget_settings_form_jslider($field, $instance) {
     );
 
 	$valid_fields = array('' => '--') + $valid_fields;
-    $form['jslider_settings']['adjust_field_max'] = array(
+    $form['sliderfield_settings']['adjust_field_max'] = array(
       '#type' => 'select',
       '#title' => t('Adjust the Maximum value from field'),
       '#default_value' => isset($settings['adjust_field_max']) ? $settings['adjust_field_max']: '',
@@ -527,7 +527,7 @@ function _jslider_field_field_widget_settings_form_jslider($field, $instance) {
       '#description' => t('Select which field you would like to use to adjust the slider\'s Maximum value.'),
     );
 
-    $form['jslider_settings']['animate'] = array(
+    $form['sliderfield_settings']['animate'] = array(
       '#type' => 'select',
       '#title' => t('Animate'),
       '#options' => array(
@@ -540,7 +540,7 @@ function _jslider_field_field_widget_settings_form_jslider($field, $instance) {
       //'#description' => t('Determines whether the slider handles move horizontally (min on left, max on right) or vertically (min on bottom, max on top).'),
       '#default_value' => $settings['animate']
     );
-    $form['jslider_settings']['orientation'] = array(
+    $form['sliderfield_settings']['orientation'] = array(
       '#type' => 'select',
       '#title' => t('Orientation'),
       '#options' => array(
@@ -551,7 +551,7 @@ function _jslider_field_field_widget_settings_form_jslider($field, $instance) {
       '#description' => t('Determines whether the slider handles move horizontally (min on left, max on right) or vertically (min on bottom, max on top).'),
       '#default_value' => $settings['orientation']
     );
-    $form['jslider_settings']['range'] = array(
+    $form['sliderfield_settings']['range'] = array(
       '#type' => 'select',
       '#title' => t('Range'),
       '#options' => array(
@@ -563,36 +563,36 @@ function _jslider_field_field_widget_settings_form_jslider($field, $instance) {
       '#description' => t('Whether the slider represents a range.'),
       '#default_value' => $settings['range']
     );
-    $form['jslider_settings']['step'] = array(
+    $form['sliderfield_settings']['step'] = array(
       '#type' => 'textfield',
       '#title' => t('Step'),
       '#size' => 5,
       '#description' => t('Determines the size or amount of each interval or step the slider takes between the min and max. The full specified value range of the slider (max - min) should be evenly divisible by the step.'),
       '#required' => TRUE,
-      '#element_validate' => array('jslider_field_validate_positive_number'),
+      '#element_validate' => array('sliderfield_validate_positive_number'),
       '#default_value' => $settings['step']
     );
-    $form['jslider_settings']['slider_style'] = array(
+    $form['sliderfield_settings']['slider_style'] = array(
       '#type' => 'select',
       '#title' => t('Style'),
-      '#options' => jslider_field_get_styles(),
+      '#options' => sliderfield_get_styles(),
       '#description' => t('Some default color styles for ease of use'),
       '#default_value' => $settings['slider_style']
     );
-    $form['jslider_settings']['display_values'] = array(
+    $form['sliderfield_settings']['display_values'] = array(
       '#type' => 'checkbox',
       '#title' => t('Display Values'),
       '#description' => t('If enabled display the current values of slider as simple text.'),
       '#default_value' => $settings['display_values']
     );
-    $form['jslider_settings']['slider_length'] = array(
+    $form['sliderfield_settings']['slider_length'] = array(
       '#type' => 'textfield',
       '#title' => t('Slider Length'),
       '#size' => 5,
       '#description' => t('Acceptable types are the same as css width and height (100px) and it will be used as width or height depending on #orientation'),
       '#default_value' => $settings['slider_length']
     );
-    $form['jslider_settings']['hide_inputs'] = array(
+    $form['sliderfield_settings']['hide_inputs'] = array(
       '#type' => 'checkbox',
       '#title' => t('Hide Input Textfields'),
       '#description' => t('If enabled displays only the slider and hides input textfields.'),
@@ -614,10 +614,10 @@ function _jslider_field_field_widget_settings_form_jslider($field, $instance) {
  * @param $element
  * @return mixed
  */
-function _jslider_field_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
+function _sliderfield_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
   switch ($instance['widget']['type']) {
-    case 'jslider':
-      $settings = $instance['widget']['settings']['jslider_settings'];
+    case 'sliderfield':
+      $settings = $instance['widget']['settings']['sliderfield_settings'];
       $value = NULL;
 
       if (!empty($items)) {
@@ -625,22 +625,22 @@ function _jslider_field_field_widget_form(&$form, &$form_state, $field, $instanc
       } else {
         $value = $instance['settings']['min'];
       }
-      $element['#element_validate'] = array('jslider_field_jslider_container_validate');
+      $element['#element_validate'] = array('sliderfield_sliderfield_container_validate');
 
       //$element['#tree'] = FALSE;
       $element['value'] = array(
-        //'#value_callback' => 'jslider_field_jslider_widget_value_callback',
+        //'#value_callback' => 'sliderfield_sliderfield_widget_value_callback',
         //'#tree' => FALSE,
         '#title' => $instance['label'],
         '#default_value' => $value,
         '#description' => $instance['description'],
-        '#type' => 'jslider',
+        '#type' => 'sliderfield',
         '#input_title' => NULL,
         '#required' => $instance['required'],
         '#input2_title' => t('Max'),
         '#animate' => $settings['animate'],
-        '#adjust_field_min' => isset($settings['adjust_field_min'])? '.' . drupal_clean_css_identifier('jslider-field-adjust-' . $settings['adjust_field_min']) : '',
-        '#adjust_field_max' => isset($settings['adjust_field_max'])? '.' . drupal_clean_css_identifier('jslider-field-adjust-' . $settings['adjust_field_max']) : '',
+        '#adjust_field_min' => isset($settings['adjust_field_min'])? '.' . drupal_clean_css_identifier('sliderfield-field-adjust-' . $settings['adjust_field_min']) : '',
+        '#adjust_field_max' => isset($settings['adjust_field_max'])? '.' . drupal_clean_css_identifier('sliderfield-field-adjust-' . $settings['adjust_field_max']) : '',
         '#disabled' => FALSE,
         '#max' => $instance['settings']['max'],
         '#min' => $instance['settings']['min'],
@@ -661,7 +661,7 @@ function _jslider_field_field_widget_form(&$form, &$form_state, $field, $instanc
 }
 
 
-function jslider_field_jslider_container_validate($element, &$form_state) {
+function sliderfield_sliderfield_container_validate($element, &$form_state) {
   $form_state_value = $form_state['values'];
   foreach ($element['#parents'] as $parent) {
     $form_state_value = isset($form_state_value[$parent]) ? $form_state_value[$parent] : 0;
@@ -684,7 +684,7 @@ function jslider_field_jslider_container_validate($element, &$form_state) {
  * @param $items
  * @param $errors
  */
-function jslider_field_field_validate($entity_type, $entity, $field, $instance, $langcode, $items, &$errors) {
+function sliderfield_field_validate($entity_type, $entity, $field, $instance, $langcode, $items, &$errors) {
   foreach ($items as $delta => $item) {
 
     if (!empty($item['value'])) {
@@ -700,7 +700,7 @@ function jslider_field_field_validate($entity_type, $entity, $field, $instance, 
  * @param $form_state
  * @return mixed
  */
-function jslider_field_jslider_widget_value_callback(&$element, $input = FALSE, $form_state = NULL) {
+function sliderfield_sliderfield_widget_value_callback(&$element, $input = FALSE, $form_state = NULL) {
   /*
   dpm('test');
   //return 100;
@@ -724,8 +724,8 @@ function jslider_field_jslider_widget_value_callback(&$element, $input = FALSE, 
  * @param $form
  * @param $form_state
  */
-function _jslider_field_form_field_ui_field_edit_form_alter_jslider(&$form, &$form_state) {
-  if ($form['#instance']['widget']['type'] == 'jslider') {
+function _sliderfield_form_field_ui_field_edit_form_alter_sliderfield(&$form, &$form_state) {
+  if ($form['#instance']['widget']['type'] == 'sliderfield') {
     $form['instance']['settings']['min']['#weight'] = 0;
 	$form['instance']['settings']['max']['#weight'] = 0;
     $form['instance']['settings']['min']['#required'] = TRUE;
@@ -740,12 +740,12 @@ function _jslider_field_form_field_ui_field_edit_form_alter_jslider(&$form, &$fo
  * Add a css class to adjustment form elements, to enable them to be targeted
  * by the appropriate javascript.
  */
-function _jslider_field_jslider_widget_field_widget_form_alter(&$element, &$form_state, $context) {
+function _sliderfield_sliderfield_widget_field_widget_form_alter(&$element, &$form_state, $context) {
   $instance = $context['instance'];
   if ($instance['widget']['type'] == 'number') {
     $entity_fields = field_info_instances($instance['entity_type'], $instance['bundle']);
     if (array_key_exists($instance['field_name'], $entity_fields)) {
-      $element['value']['#process'][] = '_jslider_field_jslider_widget_adjust_process';
+      $element['value']['#process'][] = '_sliderfield_sliderfield_widget_adjust_process';
     }
   }
 }
@@ -753,9 +753,9 @@ function _jslider_field_jslider_widget_field_widget_form_alter(&$element, &$form
 /**
  * Helper function to add css class to adjustment elements.
  */
-function _jslider_field_jslider_widget_adjust_process($element, &$form_state, $form) {
+function _sliderfield_sliderfield_widget_adjust_process($element, &$form_state, $form) {
   $instance = field_widget_instance($element, $form_state);
   $widget_settings = $instance['widget']['settings'];
-  $element['#attributes']['class'][] = 'jslider-field-adjust-'.drupal_clean_css_identifier($element['#field_name']);
+  $element['#attributes']['class'][] = 'sliderfield-field-adjust-'.drupal_clean_css_identifier($element['#field_name']);
   return $element;
 }
