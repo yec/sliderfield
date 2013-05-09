@@ -6,7 +6,7 @@
 function _sliderfield_theme_transfer_slider() {
   $data['transfer_slider'] = array(
     'render element' => 'element',
-    'file' => 'sliderfield_transfer_slider_element.inc',
+    'file' => 'sliderfield_element_transfer_slider.inc',
   );
   return $data;
 }
