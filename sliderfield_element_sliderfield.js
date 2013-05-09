@@ -2,22 +2,22 @@
   /**
    * This script adds jQuery slider functionality to transform_slider form element
    */
-  Drupal.behaviors.jSliderFieldjSlider = {
+  Drupal.behaviors.SliderFieldSliderField = {
     attach: function (context, settings) {
 
       // Create sliders
-      $('.jslider-container:not(.jslider-processed)', context).each(function () {
+      $('.sliderfield-container:not(.sliderfield-processed)', context).each(function () {
 
-        $(this).addClass('jslider-processed');
+        $(this).addClass('sliderfield-processed');
         var slider_id = $(this).parent().attr('id');
-        var setting = settings['jslider_field_' + slider_id];
+        var setting = settings['sliderfield_field_' + slider_id];
 
         // Get values
-        var $slider = $(this).parents('.jslider', context);
+        var $slider = $(this).parents('.sliderfield', context);
 
         var $values = [];
-        var $value = $slider.find('.jslider-value-field', context).val() - 0;
-        var $value2 = $slider.find('.jslider-value2-field', context).val() - 0;
+        var $value = $slider.find('.sliderfield-value-field', context).val() - 0;
+        var $value2 = $slider.find('.sliderfield-value2-field', context).val() - 0;
         if (!isNaN($value2)) {
           $values = [$value, $value2];
         } else {
@@ -26,7 +26,7 @@
         }
 
         if (!setting.display_inputs) {
-          $slider.find('.jslider-value-field, .jslider-value2-field', context).parent().hide();
+          $slider.find('.sliderfield-value-field, .sliderfield-value2-field', context).parent().hide();
         }
         // Setup slider
         $(this).slider({
@@ -38,16 +38,16 @@
           range : setting.range,
           step : setting.step,
           values : $values,
-          slide: jslidersSlideProcess,
-          stop: jslidersSlideStop,
-          change: jslidersSlideChange
+          slide: sliderfieldsSlideProcess,
+          stop: sliderfieldsSlideStop,
+          change: sliderfieldsSlideChange
         });
 
         if (setting.disabled) {
           $(this).slider( "disable" );
         }
 
-        jslidersSlideUpdateFields($slider, {value: $value, values: $values});
+        sliderfieldsSlideUpdateFields($slider, {value: $value, values: $values});
 
         // Adjust the range when the target field is changed
         var adjust_field = $(setting.adjust_field_max_css_selector  + ',' + setting.adjust_field_min_css_selector);
@@ -60,11 +60,11 @@
 		    } else if ($target.hasClass(setting.adjust_field_max_css_selector.replace('.', ''))) {
 		      option_name = "max";
 		    }
-		    var $jSlider = $slider.find('.jslider-container', context);
-			$jSlider.slider("option", option_name, parseInt($target.val()));
-            $jSlider.slider("option", {
-              "value" : $jSlider.slider('value'),
-              "values" : $jSlider.slider('values')
+		    var $SliderField = $slider.find('.sliderfield-container', context);
+			$SliderField.slider("option", option_name, parseInt($target.val()));
+            $SliderField.slider("option", {
+              "value" : $SliderField.slider('value'),
+              "values" : $SliderField.slider('values')
             });
           });
         }
@@ -74,74 +74,74 @@
 
 
       // Bind left textfield changes
-      $('.jslider-value-field:not(.jslider-processed)', context)
-          .addClass('jslider-processed')
+      $('.sliderfield-value-field:not(.sliderfield-processed)', context)
+          .addClass('sliderfield-processed')
           .keyup(function(e) {
             // Get container
-            var $slider = $(this).parents('.jslider', context);
+            var $slider = $(this).parents('.sliderfield', context);
 
             // Left input value
             var $value = $(this).val() - 0;
             if (isNaN($value)) {
               $value = 0;
-              $slider.find('.jslider-value-field', context).val($value);
+              $slider.find('.sliderfield-value-field', context).val($value);
             }
 
             // Get slider max value
-            var $jSlider = $slider.find('.jslider-container', context);
-            var $max = $jSlider.slider('option', 'max');
+            var $SliderField = $slider.find('.sliderfield-container', context);
+            var $max = $SliderField.slider('option', 'max');
 
             // Validate left input
             if ($value > $max) {
               $value = $max;
-              $slider.find('.jslider-value-field', context).val($value);
+              $slider.find('.sliderfield-value-field', context).val($value);
             }
 
             // Setup right value
-            //$slider.find('.jslider-right-field', context).val($max - $left);
+            //$slider.find('.sliderfield-right-field', context).val($max - $left);
 
             // Move slider without toggling events
-            $jSlider.slider({value: $value});
+            $SliderField.slider({value: $value});
           });
 
       // Bind left textfield changes
-      $('.jslider-value2-field:not(.jslider-processed)', context)
-          .addClass('jslider-processed')
+      $('.sliderfield-value2-field:not(.sliderfield-processed)', context)
+          .addClass('sliderfield-processed')
           .keyup(function(e) {
 
             // Get container
-            var $slider = $(this).parents('.jslider', context);
+            var $slider = $(this).parents('.sliderfield', context);
 
             // Left input value
             var $value = $(this).val() - 0;
             if (isNaN($value)) {
               $value = 0;
-              $slider.find('.jslider-value2-field', context).val($value);
+              $slider.find('.sliderfield-value2-field', context).val($value);
             }
 
             // Get slider max value
-            var $jSlider = $slider.find('.jslider-container', context);
-            var $max = $jSlider.slider('option', 'max');
+            var $SliderField = $slider.find('.sliderfield-container', context);
+            var $max = $SliderField.slider('option', 'max');
 
             // Validate left input
             if ($value > $max) {
               $value = $max;
-              $slider.find('.jslider-value2-field', context).val($value);
+              $slider.find('.sliderfield-value2-field', context).val($value);
             }
 
             // Setup right value
-            //$slider.find('.jslider-right-field', context).val($max - $left);
+            //$slider.find('.sliderfield-right-field', context).val($max - $left);
 
             // Move slider without toggling events
-            $jSlider.slider('values', 1, $value);
+            $SliderField.slider('values', 1, $value);
           });
     }
   }
 
-  var jslidersSlideStop = function($slider, ui) {
-    var $slider = $(this).parents('.jslider');
+  var sliderfieldsSlideStop = function($slider, ui) {
+    var $slider = $(this).parents('.sliderfield');
     $slider_id = $slider.attr('id');
-    var setting = Drupal.settings['jslider_field_' + $slider_id];
+    var setting = Drupal.settings['sliderfield_field_' + $slider_id];
     if (ui.value) {
       //setting.value = ui.value;
       //setting.current_value = ui.value;
@@ -149,46 +149,46 @@
   }
 
   // Slider update related fields
-  var jslidersSlideUpdateFields = function($slider, ui) {
+  var sliderfieldsSlideUpdateFields = function($slider, ui) {
     $slider_id = $slider.attr('id');
-    var setting = Drupal.settings['jslider_field_' + $slider_id];
+    var setting = Drupal.settings['sliderfield_field_' + $slider_id];
 
     var $values = [];
-    if ($slider.find('.jslider-value2-field').length > 0) {
-      $slider.find('.jslider-value-field').val(ui.values[0]);
-      $slider.find('.jslider-value2-field').val(ui.values[1]);
+    if ($slider.find('.sliderfield-value2-field').length > 0) {
+      $slider.find('.sliderfield-value-field').val(ui.values[0]);
+      $slider.find('.sliderfield-value2-field').val(ui.values[1]);
       $values = ui.values;
 
     } else {
-      $slider.find('.jslider-value-field').val(ui.value);
+      $slider.find('.sliderfield-value-field').val(ui.value);
       $values.push(ui.value);
     }
     for(var i = 0; i < $values.length; i++) {
       $values[i] = setting.display_values_format.replace('%{value}%', $values[i]);
     }
-    $slider.find('.jslider-display-values-field').html($values.join(' - '));
+    $slider.find('.sliderfield-display-values-field').html($values.join(' - '));
   }
 
-  var jslidersSlideChange = function(event, ui) {
+  var sliderfieldsSlideChange = function(event, ui) {
     // Setup values
-    var $slider = $(this).parents('.jslider');
-    jslidersSlideUpdateFields($slider, ui);
+    var $slider = $(this).parents('.sliderfield');
+    sliderfieldsSlideUpdateFields($slider, ui);
 
     $slider_id = $slider.attr('id');
-    var setting = Drupal.settings['jslider_field_' + $slider_id];
+    var setting = Drupal.settings['sliderfield_field_' + $slider_id];
     // Sync other sliders in the same group
     if (setting.group) {
-      var $group_sliders = $('.jslider:[id!="' + $slider_id + '"].jslider-group-' + setting.group);
-      if ($('.jslider:[id!="' + $slider_id + '"].jslider-group-master.jslider-group-' + setting.group).length < 1) {
+      var $group_sliders = $('.sliderfield:[id!="' + $slider_id + '"].sliderfield-group-' + setting.group);
+      if ($('.sliderfield:[id!="' + $slider_id + '"].sliderfield-group-master.sliderfield-group-' + setting.group).length < 1) {
         var $group_slider;
         var $group_slider_settings;
         var $group_ui;
         for(var i = 0; i < $group_sliders.length; i++) {
           $group_slider = $($group_sliders[i]);
-          $group_ui = $group_slider.find('.jslider-container');
-          $group_slider_settings = Drupal.settings['jslider_field_' + $group_slider.attr('id')];
+          $group_ui = $group_slider.find('.sliderfield-container');
+          $group_slider_settings = Drupal.settings['sliderfield_field_' + $group_slider.attr('id')];
 
-          jslidersSlideUpdateFields($group_slider, {value:$group_ui.slider('value'), values: $group_ui.slider('values')});
+          sliderfieldsSlideUpdateFields($group_slider, {value:$group_ui.slider('value'), values: $group_ui.slider('values')});
 
           $group_slider_settings.value = $group_ui.slider('value');
         }
@@ -200,25 +200,25 @@
     }
 
     //Manually trigger element change event for compatibility with Drupal's ajax system
-    $slider.find('.jslider-event-field').trigger('change');
+    $slider.find('.sliderfield-event-field').trigger('change');
   }
 
   // Slider processor
-  var jslidersSlideProcess = function(event, ui) {
+  var sliderfieldsSlideProcess = function(event, ui) {
     // Setup values
-    var $slider = $(this).parents('.jslider');
-    jslidersSlideUpdateFields($slider, ui);
+    var $slider = $(this).parents('.sliderfield');
+    sliderfieldsSlideUpdateFields($slider, ui);
 
     $slider_id = $slider.attr('id');
-    var setting = Drupal.settings['jslider_field_' + $slider_id];
+    var setting = Drupal.settings['sliderfield_field_' + $slider_id];
 
     // Sync other sliders in the same group
     if (setting.group) {
       var $value_diff_orig = ui.value - setting.value;
       //var value_diff = ui.value - setting.current_value;
 
-      var $group_sliders = $('.jslider:[id!="' + $slider_id + '"].jslider-group-' + setting.group);
-      if ($('.jslider:[id!="' + $slider_id + '"].jslider-group-master.jslider-group-' + setting.group).length < 1) {
+      var $group_sliders = $('.sliderfield:[id!="' + $slider_id + '"].sliderfield-group-' + setting.group);
+      if ($('.sliderfield:[id!="' + $slider_id + '"].sliderfield-group-master.sliderfield-group-' + setting.group).length < 1) {
         var $group_slider;
         var $group_slider_settings;
         var $group_ui;
@@ -229,7 +229,7 @@
 
         for(var i = 0; i < $group_sliders.length; i++) {
           $group_slider = $($group_sliders[i]);
-          $group_slider_settings = Drupal.settings['jslider_field_' + $group_slider.attr('id')];
+          $group_slider_settings = Drupal.settings['sliderfield_field_' + $group_slider.attr('id')];
           $items[i] = {value: $group_slider_settings.value, index: i};
         }
         var sortFunc = function(data_A, data_B)
@@ -241,8 +241,8 @@
         for(var i = 0; i < $group_sliders.length; i++) {
           var n = $items[i].index;
           $group_slider = $($group_sliders[n]);
-          $group_ui = $group_slider.find('.jslider-container');
-          $group_slider_settings = Drupal.settings['jslider_field_' + $group_slider.attr('id')];
+          $group_ui = $group_slider.find('.sliderfield-container');
+          $group_slider_settings = Drupal.settings['sliderfield_field_' + $group_slider.attr('id')];
 
           $group_ui.slider({slide: function() {}, change: function() {}});
 
@@ -264,9 +264,9 @@
             $group_ui.slider('value', $val);
           }
 
-          $group_ui.slider({slide: jslidersSlideProcess, change: jslidersSlideChange});
+          $group_ui.slider({slide: sliderfieldsSlideProcess, change: sliderfieldsSlideChange});
 
-          jslidersSlideUpdateFields($group_slider, {value:$group_ui.slider('value'), values: $group_ui.slider('values')});
+          sliderfieldsSlideUpdateFields($group_slider, {value:$group_ui.slider('value'), values: $group_ui.slider('values')});
         }
       }
     }
