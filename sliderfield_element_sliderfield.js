@@ -10,7 +10,7 @@
 
         $(this).addClass('sliderfield-processed');
         var slider_id = $(this).parent().attr('id');
-        var setting = settings['sliderfield_field_' + slider_id];
+        var setting = settings['sliderfield_' + slider_id];
 
         // Get values
         var $slider = $(this).parents('.sliderfield', context);
@@ -141,7 +141,7 @@
   var sliderfieldsSlideStop = function($slider, ui) {
     var $slider = $(this).parents('.sliderfield');
     $slider_id = $slider.attr('id');
-    var setting = Drupal.settings['sliderfield_field_' + $slider_id];
+    var setting = Drupal.settings['sliderfield_' + $slider_id];
     if (ui.value) {
       //setting.value = ui.value;
       //setting.current_value = ui.value;
@@ -151,7 +151,7 @@
   // Slider update related fields
   var sliderfieldsSlideUpdateFields = function($slider, ui) {
     $slider_id = $slider.attr('id');
-    var setting = Drupal.settings['sliderfield_field_' + $slider_id];
+    var setting = Drupal.settings['sliderfield_' + $slider_id];
 
     var $values = [];
     if ($slider.find('.sliderfield-value2-field').length > 0) {
@@ -175,7 +175,7 @@
     sliderfieldsSlideUpdateFields($slider, ui);
 
     $slider_id = $slider.attr('id');
-    var setting = Drupal.settings['sliderfield_field_' + $slider_id];
+    var setting = Drupal.settings['sliderfield_' + $slider_id];
     // Sync other sliders in the same group
     if (setting.group) {
       var $group_sliders = $('.sliderfield:[id!="' + $slider_id + '"].sliderfield-group-' + setting.group);
@@ -186,7 +186,7 @@
         for(var i = 0; i < $group_sliders.length; i++) {
           $group_slider = $($group_sliders[i]);
           $group_ui = $group_slider.find('.sliderfield-container');
-          $group_slider_settings = Drupal.settings['sliderfield_field_' + $group_slider.attr('id')];
+          $group_slider_settings = Drupal.settings['sliderfield_' + $group_slider.attr('id')];
 
           sliderfieldsSlideUpdateFields($group_slider, {value:$group_ui.slider('value'), values: $group_ui.slider('values')});
 
@@ -210,7 +210,7 @@
     sliderfieldsSlideUpdateFields($slider, ui);
 
     $slider_id = $slider.attr('id');
-    var setting = Drupal.settings['sliderfield_field_' + $slider_id];
+    var setting = Drupal.settings['sliderfield_' + $slider_id];
 
     // Sync other sliders in the same group
     if (setting.group) {
@@ -229,7 +229,7 @@
 
         for(var i = 0; i < $group_sliders.length; i++) {
           $group_slider = $($group_sliders[i]);
-          $group_slider_settings = Drupal.settings['sliderfield_field_' + $group_slider.attr('id')];
+          $group_slider_settings = Drupal.settings['sliderfield_' + $group_slider.attr('id')];
           $items[i] = {value: $group_slider_settings.value, index: i};
         }
         var sortFunc = function(data_A, data_B)
@@ -242,7 +242,7 @@
           var n = $items[i].index;
           $group_slider = $($group_sliders[n]);
           $group_ui = $group_slider.find('.sliderfield-container');
-          $group_slider_settings = Drupal.settings['sliderfield_field_' + $group_slider.attr('id')];
+          $group_slider_settings = Drupal.settings['sliderfield_' + $group_slider.attr('id')];
 
           $group_ui.slider({slide: function() {}, change: function() {}});
 
