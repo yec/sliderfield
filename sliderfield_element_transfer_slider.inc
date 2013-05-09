@@ -49,6 +49,22 @@ function sliderfield_transfer_slider_process($element) {
 
   // Create markup for slider container
   $element['container']['#markup'] = '<div class="transfer-slider-container"></div>';
+  $element['container']['#attached'] = array(
+    'library' => array(
+      array('system', 'ui.slider')
+    ),
+    'js' => array(
+      drupal_get_path('module', 'sliderfield') . '/sliderfield_element_transfer_slider.js',
+    ),
+    'css' => array(
+      array(
+        'data' => drupal_get_path('module', 'sliderfield') . '/sliderfield_element_transfer_slider.css',
+        'type' => 'file',
+        //'group' => CSS_SYSTEM,
+        'weight' => 2000,
+      )
+    ),
+  );
 
   // Generate right input for slider
   $element['right'] = array(
@@ -75,19 +91,4 @@ function sliderfield_transfer_slider_validate($element, &$form_state) {
   if (($element['#value']['left'] + $element['#value']['right']) != $sum) {
     form_error($element, t("The sum of left and right values doesn't check with original."));
   }
-}
-
-/**
- * Theme output of transfer_slider
- *
- * @param array $element
- */
-function theme_sliderfield_transfer_slider($vars) {
-  // Add jQuery UI Slider
-  drupal_add_library('system', 'ui.slider');
-
-  // Add css and js for slider form element
-  $path = drupal_get_path('module', 'sliderfield');
-  drupal_add_js($path . '/sliderfield_element_transfer_slider.js');
-  drupal_add_css($path . '/sliderfield_element_transfer_slider.css');
 }
