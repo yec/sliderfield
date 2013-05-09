@@ -7,9 +7,8 @@
  */
 function sliderfield_element_info() {
   require_once('sliderfield_element_sliderfield.inc');
-  require_once('sliderfield_transfer_slider_element.inc');
   $data1 = _sliderfield_element_info_sliderfield();
-  $data2 = _sliderfield_element_info_transfer_slider();
+  $data2 = array();
   $data = array_merge($data1, $data2);
   return $data;
 }
@@ -23,9 +22,8 @@ function sliderfield_element_info() {
  */
 function sliderfield_theme($existing, $type, $theme, $path) {
   require_once('sliderfield_element_sliderfield.inc');
-  require_once('sliderfield_transfer_slider_element.inc');
   $data1 = _sliderfield_theme_sliderfield($existing, $type, $theme, $path);
-  $data2 = _sliderfield_theme_transfer_slider($existing, $type, $theme, $path);
+  $data2 = array();
   $data = array_merge($data1, $data2);
   return $data;
 }
