@@ -48,6 +48,16 @@ Example:
 
 function example_form() {
 
+  $form['slider'] = array(
+    '#type' => 'transfer_slider',
+    '#title' => t('Slider test'),
+    '#left_value' => 0,
+    '#right_value' => 200,
+    '#left' => t('Left input'),
+    '#right' => t('Right input'),
+    '#size' => 4,
+  );
+
   $form['slider1'] = array(
     '#title' => NULL,
     '#title2' => NULL,
