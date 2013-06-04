@@ -341,6 +341,24 @@ function _sliderfield_element_sliderfield_structure($element, &$form_state) {
     );
   }
 
+  // Generate input for sliders with adjustable min/max
+  if (!empty($element['#adjust_field_min'])) {
+    $element['container']['min_value'] = array(
+      '#tree'       => TRUE,
+      '#type'       => 'hidden',
+      '#default_value'       => $element['#min'],
+      '#attributes' => array('class' => array('sliderfield-min-value-field')),
+    );
+  }
+  if (!empty($element['#adjust_field_max'])) {
+    $element['container']['max_value'] = array(
+      '#tree'       => TRUE,
+      '#type'       => 'hidden',
+      '#default_value'       => $element['#max'],
+      '#attributes' => array('class' => array('sliderfield-max-value-field')),
+    );
+  }
+
   //$element = ajax_pre_render_element($element);
   //dpm($element);
 
@@ -427,15 +445,15 @@ function _sliderfield_field_widget_info_sliderfield() {
            * Number: The duration of the animation, in milliseconds.
            */
           'animate' => TRUE,
-		  /**
-		  * Make the min value adjustable dynamically via another element
-		  * Type of the value is field name
-		  */
+          /**
+          * Make the min value adjustable dynamically via another element
+          * Type of the value is field name
+          */
           'adjust_field_min' => NULL,
-		  /**
-		  * Make the max value adjustable dynamically via another element
-		  * Type of the value is field name
-		  */
+          /**
+          * Make the max value adjustable dynamically via another element
+          * Type of the value is field name
+          */
           'adjust_field_max' => NULL,
           /**
            * Determines whether the slider handles move horizontally (min on left, max on right)
@@ -493,7 +511,7 @@ function _sliderfield_field_widget_settings_form_sliderfield($field, $instance) 
       '#title' => t('Slider Settings'),
       '#collapsible' => TRUE,
       '#collapsed' => FALSE,
-	  '#weight' => 0
+      '#weight' => 0
     );
 
     $entity_fields = field_info_instances($instance['entity_type'], $instance['bundle']);
@@ -519,7 +537,7 @@ function _sliderfield_field_widget_settings_form_sliderfield($field, $instance) 
       '#description' => t('Select which field you would like to use to adjust the slider\'s Minimum value.'),
     );
 
-	$valid_fields = array('' => '--') + $valid_fields;
+    $valid_fields = array('' => '--') + $valid_fields;
     $form['sliderfield_settings']['adjust_field_max'] = array(
       '#type' => 'select',
       '#title' => t('Adjust the Maximum value from field'),
@@ -662,6 +680,31 @@ function _sliderfield_field_widget_form(&$form, &$form_state, $field, $instance,
 
 
 function sliderfield_sliderfield_container_validate($element, &$form_state) {
+
+  #--(Begin)--> Set min/max for sliders with adjustable min/max
+  if (isset($element['value']['container']['max_value'])) {
+    $form_state_value = $form_state['values'];
+    foreach ($element['value']['container']['max_value']['#parents'] as $parent) {
+      $form_state_value = isset($form_state_value[$parent]) ? $form_state_value[$parent] : 0;
+    }
+    $element_max_value = $form_state_value;
+    $element['#max'] = $element_max_value;
+	$field_state = field_form_get_state($element['#field_parents'], $element['#field_name'], $element['#language'], $form_state);
+    $field_state['instance']['settings']['max'] = $element['#max'];
+	field_form_set_state($element['#field_parents'], $element['#field_name'], $element['#language'], $form_state, $field_state);
+	$s = field_widget_instance($element, $form_state);
+  }
+  if (isset($element['value']['container']['min_value'])) {
+    $form_state_value = $form_state['values'];
+    foreach ($element['value']['container']['min_value']['#parents'] as $parent) {
+      $form_state_value = isset($form_state_value[$parent]) ? $form_state_value[$parent] : 0;
+    }
+    $element_min_value = $form_state_value;
+    $element['#min'] = $element_min_value;
+    $form_state['field'][$element['#field_name']][$element['#language']]['instance']['settings']['min'] = $element['#min'];
+  }
+  #--(End)--> Set min/max for sliders with adjustable min/max
+
   $form_state_value = $form_state['values'];
   foreach ($element['#parents'] as $parent) {
     $form_state_value = isset($form_state_value[$parent]) ? $form_state_value[$parent] : 0;
@@ -684,13 +727,13 @@ function sliderfield_sliderfield_container_validate($element, &$form_state) {
  * @param $items
  * @param $errors
  */
-function sliderfield_field_validate($entity_type, $entity, $field, $instance, $langcode, $items, &$errors) {
+function _sliderfield_sliderfield_field_validate($entity_type, $entity, $field, $instance, $langcode, $items, &$errors) {
+  /*
   foreach ($items as $delta => $item) {
-
     if (!empty($item['value'])) {
-
     }
   }
+  */
 }
 
 
@@ -727,7 +770,7 @@ function sliderfield_sliderfield_widget_value_callback(&$element, $input = FALSE
 function _sliderfield_form_field_ui_field_edit_form_alter_sliderfield(&$form, &$form_state) {
   if ($form['#instance']['widget']['type'] == 'sliderfield') {
     $form['instance']['settings']['min']['#weight'] = 0;
-	$form['instance']['settings']['max']['#weight'] = 0;
+    $form['instance']['settings']['max']['#weight'] = 0;
     $form['instance']['settings']['min']['#required'] = TRUE;
     $form['instance']['settings']['max']['#required'] = TRUE;
   }
@@ -742,6 +785,8 @@ function _sliderfield_form_field_ui_field_edit_form_alter_sliderfield(&$form, &$
  */
 function _sliderfield_sliderfield_widget_field_widget_form_alter(&$element, &$form_state, $context) {
   $instance = $context['instance'];
+  if ($instance['widget']['type'] == 'sliderfield') {
+  }
   if ($instance['widget']['type'] == 'number') {
     $entity_fields = field_info_instances($instance['entity_type'], $instance['bundle']);
     if (array_key_exists($instance['field_name'], $entity_fields)) {

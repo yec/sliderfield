@@ -53,22 +53,27 @@
         var adjust_field = $(setting.adjust_field_max_css_selector  + ',' + setting.adjust_field_min_css_selector);
         if (adjust_field.length) {
           adjust_field.bind('keyup', function(event) {
-		    var $target = $(event.target);
-		    var option_name = "";
-		    if ($target.hasClass(setting.adjust_field_min_css_selector.replace('.', ''))) {
-		      option_name = "min";
-		    } else if ($target.hasClass(setting.adjust_field_max_css_selector.replace('.', ''))) {
-		      option_name = "max";
-		    }
-		    var $SliderField = $slider.find('.sliderfield-container', context);
-			$SliderField.slider("option", option_name, parseInt($target.val()));
-            $SliderField.slider("option", {
-              "value" : $SliderField.slider('value'),
-              "values" : $SliderField.slider('values')
-            });
+            var $target = $(event.target);
+            var option_name = "";
+			var target_value = parseInt($target.val());
+			if (target_value) {
+              if ($target.hasClass(setting.adjust_field_min_css_selector.replace('.', ''))) {
+                option_name = "min";
+                $slider.find('.sliderfield-min-value-field', context).val(target_value);
+              } else if ($target.hasClass(setting.adjust_field_max_css_selector.replace('.', ''))) {
+                option_name = "max";
+                $slider.find('.sliderfield-max-value-field', context).val(target_value);
+              }
+              var $SliderField = $slider.find('.sliderfield-container', context);
+              $SliderField.slider("option", option_name, target_value);
+              $SliderField.slider("option", {
+                "value" : $SliderField.slider('value'),
+                "values" : $SliderField.slider('values')
+              });
+			}
           });
+          adjust_field.trigger('keyup');
         }
-
       });
 
 
