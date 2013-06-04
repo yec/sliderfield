@@ -40,7 +40,8 @@
           values : $values,
           slide: sliderfieldsSlideProcess,
           stop: sliderfieldsSlideStop,
-          change: sliderfieldsSlideChange
+          change: sliderfieldsSlideChange,
+          create: sliderfieldsSlideCreate,
         });
 
         if (setting.disabled) {
@@ -55,8 +56,8 @@
           adjust_field.bind('keyup', function(event) {
             var $target = $(event.target);
             var option_name = "";
-			var target_value = parseInt($target.val());
-			if (target_value) {
+            var target_value = parseInt($target.val());
+            if (target_value) {
               if ($target.hasClass(setting.adjust_field_min_css_selector.replace('.', ''))) {
                 option_name = "min";
                 $slider.find('.sliderfield-min-value-field', context).val(target_value);
@@ -70,7 +71,7 @@
                 "value" : $SliderField.slider('value'),
                 "values" : $SliderField.slider('values')
               });
-			}
+            }
           });
           adjust_field.trigger('keyup');
         }
@@ -170,6 +171,11 @@
     }
     for(var i = 0; i < $values.length; i++) {
       $values[i] = setting.display_values_format.replace('%{value}%', $values[i]);
+	  // Update handler bubble
+      if (setting.display_bubble) {
+        var bubble_value = setting.display_bubble_format.replace('%{value}%', $values[i]);
+	    $('#' + $slider_id + ' .ui-slider-handle:eq(' + i + ') .sliderfield-bubble').html(bubble_value);
+      }
     }
     $slider.find('.sliderfield-display-values-field').html($values.join(' - '));
   }
@@ -206,6 +212,20 @@
 
     //Manually trigger element change event for compatibility with Drupal's ajax system
     $slider.find('.sliderfield-event-field').trigger('change');
+  }
+
+  var sliderfieldsSlideCreate = function(event, ui) {
+    var $slider = $(this).parents('.sliderfield');
+    $slider_id = $slider.attr('id');
+    var setting = Drupal.settings['sliderfield_' + $slider_id];
+
+    // Add bubble to each handler
+    if (setting.display_bubble) {
+      var handle = $(this).find('.ui-slider-handle');
+	  var bubble_value = '';//setting.display_bubble_format.replace('%{value}%', ui.value);
+      var bubble = $('<div class="sliderfield-bubble">' + bubble_value + '</div>');
+      handle.append(bubble);
+    }
   }
 
   // Slider processor

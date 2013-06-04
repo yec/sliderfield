@@ -106,6 +106,14 @@ function _sliderfield_element_info_sliderfield() {
      */
     '#display_values_format' => '%{value}%',
     /**
+     * Display a hint/bubble near each slider handler showing the value of that handler
+     */
+	'#display_bubble' => FALSE,
+	/**
+	* Format of the displaied values in bubble/hint, The usage is mostly for showing $,% or other signs near the value. Use %{value}% as slider value
+	*/
+	'#display_bubble_format' => '%{value}%',
+    /**
      * Acceptable types are the same as css with and height and it will be used as width
      * or height depending on #orientation
      */
@@ -311,6 +319,8 @@ function _sliderfield_element_sliderfield_structure($element, &$form_state) {
               'step' => $element['#step'] * 1,
               'display_inputs' => $element['#display_inputs'],
               'display_values_format' => $element['#display_values_format'],
+              'display_bubble' => $element['#display_bubble'],
+              'display_bubble_format' => $element['#display_bubble_format'],
               'display_values' => $element['#display_values'],
               'group' => $element['#group'],
               'group_type' => $element['#group_type'],
@@ -488,6 +498,15 @@ function _sliderfield_field_widget_info_sliderfield() {
            */
           'display_values_format' => '%{value}%',
           /**
+           * Display a hint/bubble near each slider handler showing the value of that handler
+           */
+          'display_bubble' => FALSE,
+          /**
+           * Format of the displaied value in bubble/hint
+           * The usage is mostly for showing $,% or other signs near the value
+           */
+          'display_bubble_format' => '%{value}%',
+          /**
            * Acceptable types are the same as css with and height and it will be used as width
            * or height depending on #orientation
            */
@@ -609,12 +628,28 @@ function _sliderfield_field_widget_settings_form_sliderfield($field, $instance) 
       '#description' => t('If enabled display the current values of slider as simple text.'),
       '#default_value' => $settings['display_values']
     );
+	if (!isset($settings['display_values_format'])) $settings['display_values_format'] = '%{value}%';
     $form['sliderfield_settings']['display_values_format'] = array(
       '#type' => 'textfield',
       '#title' => t('Display Values Format'),
       '#size' => 15,
       '#description' => t('Format of the displaied values, The usage is mostly for showing $,% or other signs near the value. Use %{value}% as slider value'),
       '#default_value' => $settings['display_values_format']
+    );
+	if (!isset($settings['display_bubble'])) $settings['display_bubble'] = FALSE;
+    $form['sliderfield_settings']['display_bubble'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Display bubble/hint'),
+      '#description' => t('Display a hint/bubble near each slider handler showing the value of that handler.'),
+      '#default_value' => $settings['display_bubble']
+    );
+	if (!isset($settings['display_bubble_format'])) $settings['display_bubble_format'] = '%{value}%';
+    $form['sliderfield_settings']['display_bubble_format'] = array(
+      '#type' => 'textfield',
+	  '#size' => 15,
+      '#title' => t('Display bubble/hint format'),
+      '#description' => t('Format of the displaied values in bubble/hint, The usage is mostly for showing $,% or other signs near the value. Use %{value}% as slider value'),
+      '#default_value' => $settings['display_bubble_format']
     );
     $form['sliderfield_settings']['slider_length'] = array(
       '#type' => 'textfield',
@@ -659,6 +694,12 @@ function _sliderfield_field_widget_form(&$form, &$form_state, $field, $instance,
       if (!isset($settings['display_values_format'])) {
         $settings['display_values_format'] = '%{value}%';
       }
+      if (!isset($settings['display_bubble'])) {
+        $settings['display_bubble'] = FALSE;
+      }
+      if (!isset($settings['display_bubble_format'])) {
+        $settings['display_bubble_format'] = '%{value}%';
+      }
       //$element['#tree'] = FALSE;
       $element['value'] = array(
         //'#value_callback' => 'sliderfield_sliderfield_widget_value_callback',
@@ -686,7 +727,8 @@ function _sliderfield_field_widget_form(&$form, &$form_state, $field, $instance,
         '#display_values_format' => $settings['display_values_format'],
         '#slider_length' => $settings['slider_length'],
         '#display_inside_fieldset' => FALSE,
-        '#validate_range' => FALSE
+        '#validate_range' => FALSE,
+		'#display_bubble' => $settings['display_bubble']
       );
       break;
   }
