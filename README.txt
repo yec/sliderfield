@@ -20,6 +20,7 @@ FEATURES
 - Adjustable slider widget that allows changing slider range dynamically
 - Supports all numeric field types
 - Supports integer , float and decimal numbers as step
+- Can display bubble/hint near slider handles
 
 INSTALLATION
 ============
@@ -141,6 +142,14 @@ Example:
      * The usage is mostly for showing $,% or other signs near the value
      */
     '#display_values_format' => '%{value}%',
+    /**
+     * Display a hint/bubble near each slider handler showing the value of that handler
+     */
+	'#display_bubble' => FALSE,
+	/**
+	* Format of the displaied values in bubble/hint, The usage is mostly for showing $,% or other signs near the value. Use %{value}% as slider value
+	*/
+	'#display_bubble_format' => '%{value}%',
     /**
      * Acceptable types are the same as css with and height and it will be used as width
      * or height depending on #orientation
