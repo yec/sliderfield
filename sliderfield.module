@@ -100,7 +100,7 @@ function sliderfield_validate_number($element, &$form_state) {
  * @param $form_state
  */
 function sliderfield_validate_positive_number($element, &$form_state) {
-  if (sliderfield_validate_number($element, &$form_state)) {
+  if (sliderfield_validate_number($element, $form_state)) {
     if ($element['#value'] > 0) {
       form_error($element, t('The value should be a valid positive number'));
 	}
