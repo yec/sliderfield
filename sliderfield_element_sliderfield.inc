@@ -483,6 +483,11 @@ function _sliderfield_field_widget_info_sliderfield() {
            */
           'display_values' => TRUE,
           /**
+           * Format of the displaied values
+           * The usage is mostly for showing $,% or other signs near the value
+           */
+          'display_values_format' => '%{value}%',
+          /**
            * Acceptable types are the same as css with and height and it will be used as width
            * or height depending on #orientation
            */
@@ -604,6 +609,13 @@ function _sliderfield_field_widget_settings_form_sliderfield($field, $instance) 
       '#description' => t('If enabled display the current values of slider as simple text.'),
       '#default_value' => $settings['display_values']
     );
+    $form['sliderfield_settings']['display_values_format'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Display Values Format'),
+      '#size' => 15,
+      '#description' => t('Format of the displaied values, The usage is mostly for showing $,% or other signs near the value. Use %{value}% as slider value'),
+      '#default_value' => $settings['display_values_format']
+    );
     $form['sliderfield_settings']['slider_length'] = array(
       '#type' => 'textfield',
       '#title' => t('Slider Length'),
@@ -644,7 +656,9 @@ function _sliderfield_field_widget_form(&$form, &$form_state, $field, $instance,
         $value = $instance['settings']['min'];
       }
       $element['#element_validate'] = array('sliderfield_sliderfield_container_validate');
-
+      if (!isset($settings['display_values_format'])) {
+        $settings['display_values_format'] = '%{value}%';
+      }
       //$element['#tree'] = FALSE;
       $element['value'] = array(
         //'#value_callback' => 'sliderfield_sliderfield_widget_value_callback',
@@ -669,6 +683,7 @@ function _sliderfield_field_widget_form(&$form, &$form_state, $field, $instance,
         '#size' => 3,
         '#display_inputs' => !$settings['hide_inputs'],
         '#display_values' => $settings['display_values'],
+        '#display_values_format' => $settings['display_values_format'],
         '#slider_length' => $settings['slider_length'],
         '#display_inside_fieldset' => FALSE,
         '#validate_range' => FALSE
