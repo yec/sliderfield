@@ -193,12 +193,13 @@ function sliderfield_example_custom_form($form, &$form_state) {
     '#range' => TRUE,
     '#min' => 10,
     '#max' => 1000,
-    '#step' => 100,
+    '#step' => 1,
+	'#display_bubble' => TRUE,
+	'#display_bubble_format' => '$%{value}%',
     //'#required' => 1,
     //'#disabled' => TRUE,
     //'#display_inputs' => FALSE,
     '#display_values' => TRUE,
-    '#slider_length' => '100px',
   );
   
   $form['slider3'] = array(
@@ -227,7 +228,7 @@ function sliderfield_example_custom_form($form, &$form_state) {
     '#range' => 'max',
     '#min' => 1,
     '#max' => 100,
-    '#step' => 1,
+    '#step' => 10,
     //'#required' => 1,
     //'#disabled' => TRUE,
     '#display_inputs' => FALSE,
@@ -235,11 +236,277 @@ function sliderfield_example_custom_form($form, &$form_state) {
     '#slider_length' => '100px',
   );
   
+
+  $form['group'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Group Slider (Same)')
+  );
+
+  $form['group']['slider5'] = array(
+    '#title' => 'Item 1',
+    '#type' => 'slider',
+    '#default_value' => 50,
+    '#slider_style' => 'green',
+    '#range' => 'min',
+    '#min' => 1,
+    '#max' => 100,
+    '#step' => 1,
+    '#display_inputs' => FALSE,
+	'#group' => 'items_first',
+	'#group_type' => 'same',
+	'#group_master' => NULL,
+    //'#display_bubble' => TRUE,
+  );
+  $form['group']['slider6'] = array(
+    '#title' => 'Item 2',
+    '#type' => 'slider',
+    '#default_value' => 50,
+    '#slider_style' => 'red',
+    '#range' => 'min',
+    '#min' => 1,
+    '#max' => 100,
+    '#step' => 1,
+    '#display_inputs' => FALSE,
+	'#group' => 'items_first',
+	'#group_type' => 'same',
+	'#group_master' => NULL,
+    //'#display_bubble' => TRUE,
+  );
+  $form['group']['slider7'] = array(
+    '#title' => 'Item 2',
+    '#type' => 'slider',
+    '#default_value' => 30,
+    '#slider_style' => 'purple',
+    '#range' => 'min',
+    '#min' => 1,
+    '#max' => 100,
+    '#step' => 1,
+    '#display_inputs' => FALSE,
+	'#group' => 'items_first',
+	'#group_type' => 'same',
+	'#group_master' => NULL,
+    //'#display_bubble' => TRUE,
+  );
+  $form['group']['slider8'] = array(
+    '#title' => 'Item 2',
+    '#type' => 'slider',
+    '#default_value' => 40,
+    '#slider_style' => 'orange',
+    '#range' => 'min',
+    '#min' => 1,
+    '#max' => 100,
+    '#step' => 1,
+    '#display_inputs' => FALSE,
+	'#group' => 'items_first',
+	'#group_type' => 'same',
+	'#group_master' => NULL,
+    //'#display_bubble' => TRUE,
+  );
+
+
+  $form['group_total'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Group Slider (Total)')
+  );
+
+  $form['group_total']['slider5'] = array(
+    '#title' => 'Item 1',
+    '#type' => 'slider',
+    '#default_value' => 50,
+    '#slider_style' => 'green',
+    '#range' => 'min',
+    '#min' => 1,
+    '#max' => 100,
+    '#step' => 1,
+    '#display_inputs' => FALSE,
+	'#group' => 'items_second',
+	'#group_type' => 'total',
+	'#group_master' => NULL,
+    //'#display_bubble' => TRUE,
+  );
+  $form['group_total']['slider6'] = array(
+    '#title' => 'Item 2',
+    '#type' => 'slider',
+    '#default_value' => 50,
+    '#slider_style' => 'red',
+    '#range' => 'min',
+    '#min' => 1,
+    '#max' => 100,
+    '#step' => 1,
+    '#display_inputs' => FALSE,
+	'#group' => 'items_second',
+	'#group_type' => 'total',
+	'#group_master' => NULL,
+    //'#display_bubble' => TRUE,
+  );
+  $form['group_total']['slider7'] = array(
+    '#title' => 'Item 2',
+    '#type' => 'slider',
+    '#default_value' => 30,
+    '#slider_style' => 'purple',
+    '#range' => 'min',
+    '#min' => 1,
+    '#max' => 100,
+    '#step' => 1,
+    '#display_inputs' => FALSE,
+	'#group' => 'items_second',
+	'#group_type' => 'total',
+	'#group_master' => NULL,
+    //'#display_bubble' => TRUE,
+  );
+  $form['group_total']['slider8'] = array(
+    '#title' => 'Item 2',
+    '#type' => 'slider',
+    '#default_value' => 40,
+    '#slider_style' => 'orange',
+    '#range' => 'min',
+    '#min' => 1,
+    '#max' => 100,
+    '#step' => 1,
+    '#display_inputs' => FALSE,
+	'#group' => 'items_second',
+	'#group_type' => 'total',
+	'#group_master' => NULL,
+    //'#display_bubble' => TRUE,
+  );
+
+  $form['group_lock'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Group Slider (Lock)')
+  );
+
+  $form['group_lock']['slider5'] = array(
+    '#title' => 'Item 1',
+    '#type' => 'slider',
+    '#default_value' => 50,
+    '#slider_style' => 'green',
+    '#range' => 'min',
+    '#min' => 1,
+    '#max' => 100,
+    '#step' => 1,
+    '#display_inputs' => FALSE,
+	'#group' => 'items_third',
+	'#group_type' => 'lock',
+	'#group_master' => NULL,
+    //'#display_bubble' => TRUE,
+  );
+  $form['group_lock']['slider6'] = array(
+    '#title' => 'Item 2',
+    '#type' => 'slider',
+    '#default_value' => 50,
+    '#slider_style' => 'red',
+    '#range' => 'min',
+    '#min' => 1,
+    '#max' => 100,
+    '#step' => 1,
+    '#display_inputs' => FALSE,
+	'#group' => 'items_third',
+	'#group_type' => 'lock',
+	'#group_master' => NULL,
+    //'#display_bubble' => TRUE,
+  );
+  $form['group_lock']['slider7'] = array(
+    '#title' => 'Item 2',
+    '#type' => 'slider',
+    '#default_value' => 30,
+    '#slider_style' => 'purple',
+    '#range' => 'min',
+    '#min' => 1,
+    '#max' => 100,
+    '#step' => 1,
+    '#display_inputs' => FALSE,
+	'#group' => 'items_third',
+	'#group_type' => 'lock',
+	'#group_master' => NULL,
+    //'#display_bubble' => TRUE,
+  );
+  $form['group_lock']['slider8'] = array(
+    '#title' => 'Item 2',
+    '#type' => 'slider',
+    '#default_value' => 40,
+    '#slider_style' => 'orange',
+    '#range' => 'min',
+    '#min' => 1,
+    '#max' => 100,
+    '#step' => 1,
+    '#display_inputs' => FALSE,
+	'#group' => 'items_third',
+	'#group_type' => 'lock',
+	'#group_master' => NULL,
+    //'#display_bubble' => TRUE,
+  );
+
+  $form['group_master'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Group Slider (Master)')
+  );
+
+  $form['group_master']['slider5'] = array(
+    '#title' => 'Item 1',
+    '#type' => 'slider',
+    '#default_value' => 50,
+    '#slider_style' => 'green',
+    '#range' => 'min',
+    '#min' => 1,
+    '#max' => 100,
+    '#step' => 1,
+    '#display_inputs' => FALSE,
+	'#group' => 'items_forth',
+	'#group_type' => 'lock',
+	'#group_master' => TRUE,
+    //'#display_bubble' => TRUE,
+  );
+  $form['group_master']['slider6'] = array(
+    '#title' => 'Item 2',
+    '#type' => 'slider',
+    '#default_value' => 50,
+    '#slider_style' => 'red',
+    '#range' => 'min',
+    '#min' => 1,
+    '#max' => 100,
+    '#step' => 1,
+    '#display_inputs' => FALSE,
+	'#group' => 'items_forth',
+	'#group_type' => 'lock',
+	'#group_master' => NULL,
+    //'#display_bubble' => TRUE,
+  );
+  $form['group_master']['slider7'] = array(
+    '#title' => 'Item 2',
+    '#type' => 'slider',
+    '#default_value' => 30,
+    '#slider_style' => 'purple',
+    '#range' => 'min',
+    '#min' => 1,
+    '#max' => 100,
+    '#step' => 1,
+    '#display_inputs' => FALSE,
+	'#group' => 'items_forth',
+	'#group_type' => 'lock',
+	'#group_master' => NULL,
+    //'#display_bubble' => TRUE,
+  );
+  $form['group_master']['slider8'] = array(
+    '#title' => 'Item 2',
+    '#type' => 'slider',
+    '#default_value' => 40,
+    '#slider_style' => 'orange',
+    '#range' => 'min',
+    '#min' => 1,
+    '#max' => 100,
+    '#step' => 1,
+    '#display_inputs' => FALSE,
+	'#group' => 'items_forth',
+	'#group_type' => 'lock',
+	'#group_master' => NULL,
+    //'#display_bubble' => TRUE,
+  );
+
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Submit'),
   );
-  
+
   return $form;
 }
 
