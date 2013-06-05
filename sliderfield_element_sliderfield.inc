@@ -220,7 +220,7 @@ function _sliderfield_element_sliderfield_structure($element, &$form_state) {
     '#type'             => 'textfield',
     '#required'    => $element['#required'],
     '#element_validate' => array('sliderfield_validate_number'),
-    '#title'             => $element['#input_title'],
+    //'#title'             => $element['#input_title'],
     '#default_value'    => $value,
     '#disabled'    => $element['#disabled'],
     '#size'             => $element['#size'],
