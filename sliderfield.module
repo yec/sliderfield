@@ -86,6 +86,15 @@ function sliderfield_field_validate($entity_type, $entity, $field, $instance, $l
   _sliderfield_sliderfield_field_validate($entity_type, $entity, $field, $instance, $langcode, $items, $errors);
 }
 
+/**
+ * Function to validate integer numbers
+ *
+ * @param $element
+ * @param $form_state
+ */
+function sliderfield_validate_integer($element, &$form_state) {
+  return sliderfield_validate_number($element, $form_state);
+}
 
 /**
  * Function to validate integer numbers
