@@ -215,7 +215,8 @@ function _sliderfield_element_sliderfield_structure($element, &$form_state) {
   // Generate input for slider
   $element['value'] = array(
     '#tree'             => TRUE,
-    '#prefix'           => '<div id="' . $element['#id'] . '" class="sliderfield ' . $group_css . '">',
+    '#prefix'           => '<div id="' . $element['#id'] . '" class="sliderfield ' . $group_css . '">' . '<div class="sliderfield-event-field-container">',
+    '#suffix' => '</div>',
     '#type'             => 'textfield',
     '#required'    => $element['#required'],
     '#element_validate' => array('sliderfield_validate_number'),
@@ -236,15 +237,11 @@ function _sliderfield_element_sliderfield_structure($element, &$form_state) {
         'value' => $value
       );
     }
+    if (!isset($ajax['event'])) {
+      $ajax['event'] = 'change';
+    }
     // Generate input for slider
-    $element['hidden_item'] = array(
-      '#prefix' => '<div class="sliderfield-event-field-container">',
-      '#suffix' => '</div>',
-      '#type'             => 'textfield',
-      '#default_value'    => $element['#default_value'],
-      '#ajax'             => $ajax,
-      '#attributes'       => array('style' => 'display:none;', 'class' => array('sliderfield-event-field')),
-    );
+    $element['value']['#ajax'] = $ajax;
   }
   #--(End)--> For Ajax compatibiitly
 

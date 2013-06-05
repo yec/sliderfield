@@ -26,7 +26,8 @@
         }
 
         if (!setting.display_inputs) {
-          $slider.find('.sliderfield-value-field, .sliderfield-value2-field', context).parent().hide();
+          $slider.find('.sliderfield-value-field, .sliderfield-value2-field', context).hide();
+		  $slider.find('label', $slider.find('.sliderfield-value-field, .sliderfield-value2-field', context).parents()).hide();
         }
         // Setup slider
         $(this).slider({
@@ -211,7 +212,6 @@
     }
 
     //Manually trigger element change event for compatibility with Drupal's ajax system
-    $slider.find('.sliderfield-event-field').trigger('change');
     $slider.find('.sliderfield-value-field').trigger('change');
   }
 
