@@ -212,6 +212,7 @@
 
     //Manually trigger element change event for compatibility with Drupal's ajax system
     $slider.find('.sliderfield-event-field').trigger('change');
+    $slider.find('.sliderfield-value-field').trigger('change');
   }
 
   var sliderfieldsSlideCreate = function(event, ui) {
