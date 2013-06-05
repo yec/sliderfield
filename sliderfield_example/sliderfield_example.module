@@ -280,6 +280,30 @@ function sliderfield_example_custom_form($form, &$form_state) {
   }
 
 
+  $form['element_status'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Element Status')
+  );
+  $form['element_status']['slider'] = array(
+    '#title' => t('My slider'),
+    '#type' => 'slider',
+    '#default_value' => 2,
+    '#min' => 1,
+    '#max' => 10,
+    '#step' => 1,
+	'#disabled' => FALSE,
+    '#required' => TRUE,
+    '#states' => array(
+      'disabled' => array(
+        ':input[name="checkit"]' => array('checked' => TRUE),
+      ),
+    ),
+  );
+  $form['element_status']['checkit'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Check to disable slider'),
+    '#default_value' => 0,
+  );
 
   $form['group'] = array(
     '#type' => 'fieldset',
