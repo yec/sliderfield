@@ -236,6 +236,50 @@ function sliderfield_example_custom_form($form, &$form_state) {
     '#slider_length' => '100px',
   );
   
+  $form['ajax_simple'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Simple Ajax Test')
+  );
+  $form['ajax_simple']['trigger'] = array(
+    '#title' => 'Item 1',
+    '#type' => 'slider',
+    '#default_value' => 50,
+    '#slider_style' => 'green',
+    '#range' => 'min',
+    '#min' => 1,
+    '#max' => 100,
+    '#step' => 1,
+    '#display_inputs' => FALSE,
+    //'#display_bubble' => TRUE,
+    '#ajax' => array(
+      // #ajax has two required keys: callback and wrapper.
+      // 'callback' is a function that will be called when this element changes.
+      'callback' => 'sliderfield_example_simplest_callback',
+      // 'wrapper' is the HTML id of the page element that will be replaced.
+      'wrapper' => 'replace_textfield_div',
+      // There are also several optional keys - see ajax_example_autocheckboxes
+      // below for details on 'method', 'effect' and 'speed' and
+      // ajax_example_dependent_dropdown for 'event'.
+    ),
+  );
+
+  // This entire form element will be replaced whenever 'changethis' is updated.
+  $form['ajax_simple']['replace_textfield'] = array(
+    '#type' => 'textfield',
+    '#title' => t("Why"),
+    // The prefix/suffix provide the div that we're replacing, named by
+    // #ajax['wrapper'] above.
+    '#prefix' => '<div id="replace_textfield_div">',
+    '#suffix' => '</div>',
+  );
+
+  // An AJAX request calls the form builder function for every change.
+  // We can change how we build the form based on $form_state.
+  if (!empty($form_state['values']['changethis'])) {
+    $form['ajax_simple']['replace_textfield']['#description'] = t("Say why you chose '@value'", array('@value' => $form_state['values']['changethis']));
+  }
+
+
 
   $form['group'] = array(
     '#type' => 'fieldset',
@@ -508,6 +552,23 @@ function sliderfield_example_custom_form($form, &$form_state) {
   );
 
   return $form;
+}
+
+
+
+/**
+ * Callback for ajax_example_simplest.
+ *
+ * On an ajax submit, the form builder function is called again, then the $form
+ * and $form_state are passed to this callback function so it can select which
+ * portion of the form to send on to the client.
+ *
+ * @return renderable array (the textfield element)
+ */
+function sliderfield_example_simplest_callback($form, $form_state) {
+  // The form has already been submitted and updated. We can return the replaced
+  // item as it is.
+  return 'The selected value is ' . $form_state['values']['trigger']['value'];
 }
 
 /**
