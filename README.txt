@@ -14,13 +14,14 @@ FEATURES
   indicate how the other sliders change. Look for "group" 
 - Form API element for using slider in custom forms
 - Slider color sets
-- Ajax support
+- Flexible Ajax support
 - Supports most of jquery slider parameters like orientation, disable/enable , animation , step, etc for both UI and Form Element
 - Setting default length for slider
 - Adjustable slider widget that allows changing slider range dynamically
 - Supports all numeric field types
 - Supports integer , float and decimal numbers as step
 - Can display bubble/hint near slider handles
+- Compatible with editablefields module
 
 INSTALLATION
 ============
