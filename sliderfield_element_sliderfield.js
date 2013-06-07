@@ -184,12 +184,12 @@
       $values.push(ui.value);
     }
     for(var i = 0; i < $values.length; i++) {
-      $values[i] = setting.display_values_format.replace('%{value}%', $values[i]);
       // Update handler bubble
       if (setting.display_bubble) {
         var bubble_value = setting.display_bubble_format.replace('%{value}%', $values[i]);
         $('#' + $slider_id + ' .ui-slider-handle:eq(' + i + ') .sliderfield-bubble').html(bubble_value);
       }
+      $values[i] = setting.display_values_format.replace('%{value}%', $values[i]);
     }
     $slider.find('.sliderfield-display-values-field').html($values.join(' - '));
   }
@@ -236,7 +236,7 @@
     // Add bubble to each handler
     if (setting.display_bubble) {
       var handle = $(this).find('.ui-slider-handle');
-      var bubble_value = '';//setting.display_bubble_format.replace('%{value}%', ui.value);
+      var bubble_value = '';
       var bubble = $('<div class="sliderfield-bubble">' + bubble_value + '</div>');
       handle.append(bubble);
     }
