@@ -220,12 +220,17 @@ function _sliderfield_element_sliderfield_structure($element, &$form_state) {
     '#type'             => 'textfield',
     '#required'    => $element['#required'],
     '#element_validate' => array('sliderfield_validate_number'),
-    //'#title'             => $element['#input_title'],
+    '#title'             => $element['#input_title'],
     '#default_value'    => $value,
     '#disabled'    => $element['#disabled'],
     '#size'             => $element['#size'],
     '#attributes'       => array('class' => array('sliderfield-value-field')),
   );
+
+  //Only show title for input fields when there is more than one value
+  if (is_null($value2)) {
+    $element['value']['#title'] = NULL;
+  }
 
   #--(Begin)--> For Ajax compatibiitly
   if (isset($element['#ajax'])) {
