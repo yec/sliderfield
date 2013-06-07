@@ -45,6 +45,18 @@
           create: sliderfieldsSlideCreate,
         });
 
+        $(document).bind('state:disabled', function(e) {
+          // Only act when this change was triggered by a dependency and not by the
+          // element monitoring itself.
+          if (e.trigger) {
+            var state = 'disable';
+            if (e.value) state = 'disable'; else state = 'enable';
+            $(e.target).find('.sliderfield-container').slider(state);
+            // Note: WebKit nightlies don't reflect that change correctly.
+            // See https://bugs.webkit.org/show_bug.cgi?id=23789
+          }
+        });
+
         if (setting.disabled) {
           $(this).slider( "disable" );
         }
