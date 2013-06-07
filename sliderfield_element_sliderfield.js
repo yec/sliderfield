@@ -52,6 +52,7 @@
             var state = 'disable';
             if (e.value) state = 'disable'; else state = 'enable';
             $(e.target).find('.sliderfield-container').slider(state);
+            $(e.target).find('select, input, textarea').attr('disabled', e.value);
             // Note: WebKit nightlies don't reflect that change correctly.
             // See https://bugs.webkit.org/show_bug.cgi?id=23789
           }
