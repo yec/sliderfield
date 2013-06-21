@@ -72,10 +72,10 @@
             var option_name = "";
             var target_value = parseInt($target.val());
             if (target_value) {
-              if ($target.hasClass(setting.adjust_field_min_css_selector.replace('.', ''))) {
+              if ($(setting.adjust_field_min_css_selector).index(event.target) != -1) {
                 option_name = "min";
                 $slider.find('.sliderfield-min-value-field', context).val(target_value);
-              } else if ($target.hasClass(setting.adjust_field_max_css_selector.replace('.', ''))) {
+              } else if ($(setting.adjust_field_max_css_selector).index(event.target) != -1) {
                 option_name = "max";
                 $slider.find('.sliderfield-max-value-field', context).val(target_value);
               }

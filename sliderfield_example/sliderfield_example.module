@@ -328,6 +328,46 @@ function sliderfield_example_custom_form($form, &$form_state) {
     '#size' => 4,
   );
 
+  $form['adjustable_range'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Adjustable Range')
+  );
+
+  $form['adjustable_range']['minrange'] = array(
+    '#title' => t('Range : Min'),
+    '#type' => 'textfield',
+    '#default_value' => '3',
+    '#required' => TRUE,
+    '#size' => 5,
+  );
+
+  $form['adjustable_range']['maxrange'] = array(
+    '#title' => t('Range : Max'),
+    '#type' => 'textfield',
+    '#default_value' => '8',
+    '#required' => TRUE,
+    '#size' => 5,
+  );
+
+  $form['adjustable_range']['initialestimate'] = array(
+    '#type' => 'slider',
+    //'#orientation' => 'vertical',
+    '#default_value' => array('value' => 5, 'value2' => 6),
+    '#slider_style' => 'red',
+    '#range' => TRUE,
+    '#min' => 0,
+    '#max' => 10,
+    '#step' => 1,
+    '#adjust_field_min' => '#edit-minrange',
+    '#adjust_field_max' => '#edit-maxrange',
+    //'#required' => 1,
+    //'#disabled' => TRUE,
+    '#display_inputs' => FALSE,
+    '#display_values' => TRUE,
+    '#display_values_format' => '$%{value}%',
+    '#slider_length' => '700px',
+  );
+
   $form['group'] = array(
     '#type' => 'fieldset',
     '#title' => t('Group Slider (Same)')
