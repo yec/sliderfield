@@ -683,7 +683,6 @@ function sliderfield_example_custom_form_submit($form, &$form_state) {
       $values = $form_state['storage']['all']['values'];
     }
   }
-  drupal_set_message(t('The form has been submitted. name="@first @last", address=@address, description=@description',
-    array('@first' => $values['name']['first'], '@last' => $values['name']['last'], '@address' => $values['address'], '@description' => $values['description'])));
+  drupal_set_message(t('The form has been submitted , submitted values are !s', array('!s' => '<pre>' . print_r($form_state['values'], true) . '</pre>')));
   return '';
 }
